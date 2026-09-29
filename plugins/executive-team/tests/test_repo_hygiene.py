@@ -45,6 +45,12 @@ class HygieneTests(unittest.TestCase):
         self.assertIn("Respond in:", cos)
         self.assertIn("Consulted:", skill)
         self.assertIn("## Officer answer format", skill)
+        for f in (cos, skill, meet, read("templates", "org-profile.yaml"), read("skills", "setup", "SKILL.md")):
+            self.assertNotIn("meeting_defaults.mode", f)
+            self.assertNotIn("mode: brainstorm", f)
+        self.assertIn('Reply "mode: <other>"', skill)
+        self.assertIn("Previous meeting:", cos)
+        self.assertIn("AskUserQuestion", meet)
         self.assertTrue(skill.splitlines()[2].startswith("description: This skill should be used when"), skill.splitlines()[2])
         for a in AGENTS[1:]:
             self.assertIn("executive-team:executive-team", read("agents", a + ".md"), a)

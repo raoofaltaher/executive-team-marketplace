@@ -1,6 +1,8 @@
 # executive-team plugin: organization profile
-# Copy to the project root as org-profile.yaml (git-ignored) or run /executive-team:setup.
+# Written by /executive-team:setup into the project root as org-profile.yaml (git-ignored).
 # Empty strings mean "use the matrix value". Levels must be 1, 2, or 3.
+# The meeting mode is never set here: it is detected from each request, confirmed in the
+# brief's first line, and changed inline with "mode: <brainstorm|decide|review|plan|risk>".
 company:
   name: ""
   owner_title: "Owner"
@@ -43,5 +45,4 @@ strategic_objectives: []
 #   critical_skills: ["cso.2", "cmo.6", "coo.5"]   # <position code>.<skill number>
 
 meeting_defaults:
-  mode: brainstorm             # brainstorm | decide | review | plan | risk
-  minutes_dir: docs/executive
+  minutes_dir: docs/executive  # where meeting minutes are written, relative to the project root

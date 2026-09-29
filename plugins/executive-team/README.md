@@ -22,7 +22,7 @@ Every officer is built from a skills-by-position matrix: job title, required com
 
 | Command | What it does |
 |---|---|
-| `/executive-team:meet [mode] [officers: coo,cfo] <topic>` | Runs a meeting. Modes: `brainstorm`, `decide`, `review`, `plan`, `risk`; detected from your wording if omitted. `officers:` forces the invite list. |
+| `/executive-team:meet [mode] [officers: coo,cfo] <topic>` | Runs a meeting. Modes: `brainstorm`, `decide`, `review`, `plan`, `risk`. Detected from your wording when omitted, confirmed in the first line, asked only when unclear. `officers:` forces the invite list; `now decide` or `mode: risk` reruns the last topic in another mode. |
 | `/executive-team:setup` | Interviews you and writes `org-profile.yaml`: departments, managers, missing levels, strategic objectives, extra skills. |
 | `/executive-team:gaps-report` | Lists every gap in the source matrix and which ones your org-profile still leaves unfilled. |
 
@@ -51,7 +51,7 @@ claude --plugin-dir <path-to-repo>/plugins/executive-team
 
 ## How a meeting works
 
-1. The Chief of Staff reads the protocol, the routing index, your org-profile and the three most recent minutes.
+1. The Chief of Staff reads the protocol, the routing index, your org-profile and the three most recent minutes, then settles the mode: explicit if you gave one, otherwise detected from your wording, otherwise it asks you. The first line of every reply confirms the mode and how to change it.
 2. It invites every officer whose skills govern the decision at level 2 or 3, and tells you who and why. If nobody matches, it asks you instead of guessing. Re-run with `officers: coo,cto` to force the list.
 3. It runs the invited officers in parallel. Each answers as its position, position first, at most 300 words, ending with a confidence level and any peer it wants consulted.
 4. One consult round follows: officers named in a `Consult:` line who hold a relevant level 2 or 3 skill answer once.
@@ -73,7 +73,7 @@ positions:
   # ciso, cto, cmo, cso, cfo: same shape
 strategic_objectives:
   - { id: SO1, name: "SME customer growth", critical_skills: ["cso.2", "cmo.6", "coo.5"] }
-meeting_defaults: { mode: brainstorm, minutes_dir: docs/executive }
+meeting_defaults: { minutes_dir: docs/executive }   # the meeting mode is never a profile setting
 ```
 
 A non-empty value in the profile overrides the matrix value; the matrix value stays visible in the agent file as the source. The CSO sheet in the source has no required levels, so set all 11 in `positions.cso.level_overrides` (the setup command offers "all 3" or "all 2" as shortcuts). Until then the CSO answers everything at level 1 and says so.

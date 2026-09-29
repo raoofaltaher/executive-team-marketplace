@@ -47,7 +47,7 @@ Consult: <position codes such as cfo, cto> | none
 
 ## Override rule for org-profile.yaml (applies to: everyone)
 1. The Chief of Staff reads `org-profile.yaml` from the current project root once at startup and passes its contents to the officers. Officers use the copy they receive; when invoked directly, read the file themselves.
-2. A non-empty value there replaces the sheet value: `positions.<code>.department`, `positions.<code>.manager`, `positions.<code>.level_overrides.<n>` (1, 2, or 3), `positions.<code>.extra_skills[]`, `strategic_objectives[]`. The shapes are documented in `templates/org-profile.yaml`.
+2. A non-empty value there replaces the sheet value: `positions.<code>.department`, `positions.<code>.manager`, `positions.<code>.level_overrides.<n>` (1, 2, or 3), `positions.<code>.extra_skills[]`, `strategic_objectives[]`. `meeting_defaults.minutes_dir` sets where minutes are written. The shapes are documented in `templates/org-profile.yaml`. The meeting mode is never a profile setting.
 3. Report an invalid override (level outside 1-3, unknown skill number, unknown position code) in one line and ignore it; keep the sheet value.
 4. Report a file that cannot be parsed with the offending line, and use the sheet values throughout.
 5. Keep the sheet value visible in the agent file as the source. Do not rewrite agent files to apply overrides.
@@ -64,7 +64,13 @@ Ask each invited officer the question for the mode:
 - `plan`: milestones, dependencies on other officers, resource needs.
 - `risk`: top three risks in your domain with likelihood, impact, mitigation.
 
-Detect the mode from the meaning of the request when it is not given, in any language: a yes/no or go/no-go question ("should we", "devrions-nous", "approve") -> decide; a request for ideas or options -> brainstorm; a request for feedback or critique of something that exists -> review; a request for a roadmap or sequence -> plan; a request for what could go wrong -> risk. Otherwise use `meeting_defaults.mode` from org-profile, else `brainstorm`.
+The mode belongs to the meeting, not to a configuration file. Settle it in this order:
+1. An explicit mode in the request (the first word, or `mode: <name>`) always wins.
+2. Otherwise detect it from the meaning of the request, in any language: a yes/no or go/no-go question ("should we", "devrions-nous", "approve") -> decide; a request for ideas or options -> brainstorm; a request for feedback or critique of something that exists -> review; a request for a roadmap or sequence -> plan; a request for what could go wrong -> risk.
+3. When the wording fits two modes about equally, or fits none, do not guess: return a mode question to the Owner naming the two most likely modes and a recommendation, and run the meeting only after the answer.
+4. Always confirm the mode as the first line of the reply: `Mode: <mode> (<explicit|detected|chosen by the Owner>). Reply "mode: <other>" to rerun this topic in another mode.`
+
+A mode switch ("now decide", "switch to risk", `mode: review` with no new topic) reruns the previous topic: same invite list, each officer receives its earlier answer as context, a new brief and a new minutes file are written, and the new minutes link to the previous ones.
 
 Run invited officers in parallel, then exactly one consult round for officers named in `Consult:` lines. A consult target qualifies when the requesting officer's stated reason falls within one of the target's skills at level 2 or 3; judge by that reason together with the topic. Keep officer answers longer than 300 words in full in the minutes and summarize them in the brief.
 

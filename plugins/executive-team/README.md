@@ -46,7 +46,7 @@ claude --plugin-dir <path-to-repo>/plugins/executive-team
 ## First run
 
 1. `/executive-team:gaps-report` to see what the source left blank.
-2. `/executive-team:setup` to fill departments, managers, the CSO levels and your strategic objectives.
+2. `/executive-team:setup` to fill departments, managers and your strategic objectives.
 3. `/executive-team:meet decide Should we move client onboarding to a self-serve portal next quarter?`
 
 ## How a meeting works
@@ -64,7 +64,7 @@ Any officer can also be asked directly, outside a meeting, and can assess a role
 
 ## Customizing for your company
 
-`/executive-team:setup` writes `org-profile.yaml` in the project root (git-ignored). Keys:
+`/executive-team:setup` interviews you with multiple-choice questions (defaults offered first, free text always possible) and writes `org-profile.yaml` in the project root (git-ignored). Keys:
 
 ```yaml
 company: { name: "", owner_title: "Owner" }
@@ -76,11 +76,11 @@ strategic_objectives:
 meeting_defaults: { minutes_dir: docs/executive }   # the meeting mode is never a profile setting
 ```
 
-A non-empty value in the profile overrides the matrix value; the matrix value stays visible in the agent file as the source. The CSO sheet in the source has no required levels, so set all 11 in `positions.cso.level_overrides` (the setup command offers "all 3" or "all 2" as shortcuts). Until then the CSO answers everything at level 1 and says so.
+A non-empty value in the profile overrides the matrix value; the matrix value stays visible in the agent file as the source. The CSO sheet in the source has no required levels, so the plugin ships defaults (sales-domain skills at 3, executive leadership and corporate vision at 2), marked `plugin default` in the agent file; override any of them in `positions.cso.level_overrides`.
 
 ## Source and traceability
 
-The six officers were built from a skills-by-position matrix: one sheet per position with the job title, every required competency, its description and tasks, and the required level. Each skill in an agent file carries a source pointer (sheet, cell range, original French skill name) so any line can be traced to the matrix it came from. Fields the matrix left blank are marked `not specified in source` rather than filled in; defects in the matrix are reproduced and flagged rather than corrected. They are listed in `skills/executive-team/references/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels, an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets). Fill them for your company with `/executive-team:setup`.
+The six officers were built from a skills-by-position matrix: one sheet per position with the job title, every required competency, its description and tasks, and the required level. Each skill in an agent file carries a source pointer (sheet, cell range, original French skill name) so any line can be traced to the matrix it came from. Fields the matrix left blank are marked `not specified in source` rather than filled in; defects in the matrix are reproduced and flagged rather than corrected. They are listed in `skills/executive-team/references/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels (the plugin ships defaults), an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets). Fill them for your company with `/executive-team:setup`.
 
 ## Privacy
 

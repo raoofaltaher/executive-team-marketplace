@@ -14,6 +14,8 @@ SRC_RE = re.compile(r"^([A-Z]+)!([A-Z]+\d+:[A-Z]+\d+) · FR: (.+)$")
 SKILL_RE = re.compile(r"^### Skill (\d+): (.+)$")
 FM_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 LEVEL_VALUES = ("1", "2", "3", "not specified in source")
+# A level the plugin ships for a skill whose source cell is empty, e.g. "3 (plugin default; not specified in source)"
+DEFAULT_LEVEL_RE = re.compile(r"^([123]) \(plugin default; not specified in source\)$")
 
 
 def _fm(text):
@@ -56,7 +58,7 @@ def parse_officer(path):
         m = SKILL_RE.match(line)
         if m:
             cur = {"n": int(m.group(1)), "name": m.group(2).strip(), "level": None, "level_raw": None,
-                   "sheet": None, "cells": None, "fr": None, "keywords": "", "flags": "none"}
+                   "plugin_default": False, "sheet": None, "cells": None, "fr": None, "keywords": "", "flags": "none"}
             o["skills"].append(cur)
             continue
         if line.startswith("## "):
@@ -66,10 +68,14 @@ def parse_officer(path):
             continue
         if line.startswith("- Required level:"):
             v = line.split(":", 1)[1].strip()
-            if v not in LEVEL_VALUES:
+            dm = DEFAULT_LEVEL_RE.match(v)
+            if dm:
+                cur["level_raw"], cur["level"], cur["plugin_default"] = v, int(dm.group(1)), True
+            elif v in LEVEL_VALUES:
+                cur["level_raw"] = v
+                cur["level"] = int(v) if v in ("1", "2", "3") else None
+            else:
                 raise ValueError(f"{path}: skill {cur['n']} bad level '{v}'")
-            cur["level_raw"] = v
-            cur["level"] = int(v) if v in ("1", "2", "3") else None
         elif line.startswith("- Source:"):
             sm = SRC_RE.match(line.split(":", 1)[1].strip())
             if not sm:
@@ -130,7 +136,9 @@ def write_gaps(agents_dir, out_path):
         for col in o["missing_columns"]:
             rows.append(f"| {c} | {col} column | {c} sheet | column not present in source; add it via org-profile.positions.{lc}.extra_skills or leave as is |")
         for s in o["skills"]:
-            if s["level"] is None:
+            if s["plugin_default"]:
+                rows.append(f"| {c} | Skill {s['n']} required level is a plugin default ({s['level']}); source has none | {c}!{s['cells']} | org-profile.positions.{lc}.level_overrides.{s['n']} to change it |")
+            elif s["level"] is None:
                 rows.append(f"| {c} | Skill {s['n']} required level | {c}!{s['cells']} | org-profile.positions.{lc}.level_overrides.{s['n']} |")
             if s["flags"] and s["flags"] != "none":
                 rows.append(f"| {c} | Skill {s['n']} flag: {s['flags']} | {c}!{s['cells']} | source defect; override via org-profile or leave as is |")

@@ -15,7 +15,7 @@ Read this file before changing anything in this repository. It applies to people
 
 ```
 .claude-plugin/marketplace.json     catalog of plugins in this repository
-plugins/executive-team/             the executive-team plugin (agents, skills, templates, scripts, tests)
+plugins/executive-team/             the executive-team plugin (agents, skills, scripts, tests)
 CONTRIBUTING.md                     how to contribute and the release flow
 RELEASE-NOTES.md                    user-facing changes per release
 scripts/bump_version.py             updates plugin.json and the marketplace entry together

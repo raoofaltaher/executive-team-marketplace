@@ -31,7 +31,7 @@ positions:
   cso:
     department: ""
     manager: "Owner"
-    level_overrides: {}        # the matrix has no CSO levels; set all 11 here, e.g. { 1: 3, 2: 3, ... }
+    level_overrides: {}        # CSO levels are plugin defaults (sales skills 3, leadership and vision 2); override any here, e.g. { 9: 3 }
     extra_skills: []
   cfo:
     department: ""

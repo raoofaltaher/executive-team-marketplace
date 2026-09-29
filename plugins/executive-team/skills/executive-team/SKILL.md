@@ -47,7 +47,7 @@ Consult: <position codes such as cfo, cto> | none
 
 ## Override rule for org-profile.yaml (applies to: everyone)
 1. The Chief of Staff reads `org-profile.yaml` from the current project root once at startup and passes its contents to the officers. Officers use the copy they receive; when invoked directly, read the file themselves.
-2. A non-empty value there replaces the sheet value: `positions.<code>.department`, `positions.<code>.manager`, `positions.<code>.level_overrides.<n>` (1, 2, or 3), `positions.<code>.extra_skills[]`, `strategic_objectives[]`. `meeting_defaults.minutes_dir` sets where minutes are written. The shapes are documented in `templates/org-profile.yaml`. The meeting mode is never a profile setting.
+2. A non-empty value there replaces the sheet value: `positions.<code>.department`, `positions.<code>.manager`, `positions.<code>.level_overrides.<n>` (1, 2, or 3), `positions.<code>.extra_skills[]`, `strategic_objectives[]`. `meeting_defaults.minutes_dir` sets where minutes are written. The shapes are documented in `skills/setup/org-profile.template.yaml`. The meeting mode is never a profile setting.
 3. Report an invalid override (level outside 1-3, unknown skill number, unknown position code) in one line and ignore it; keep the sheet value.
 4. Report a file that cannot be parsed with the offending line, and use the sheet values throughout.
 5. Keep the sheet value visible in the agent file as the source. Do not rewrite agent files to apply overrides.

@@ -1,6 +1,7 @@
 """Extract the six position sheets of the skills workbook into build/positions.json.
 
-Usage: python scripts/extract_positions.py [workbook.xlsx] [--out build/positions.json]
+Usage: python scripts/extract_positions.py [workbook.xlsx] [--out build/positions.json] [--names]
+The workbook path defaults to $SKILLS_WORKBOOK or the first *.xlsx in the current directory.
 The workbook is not committed; this script only runs locally.
 """
 import json
@@ -102,8 +103,21 @@ def forbidden_names(path):
     return sorted(tokens)
 
 
+def workbook_basename(path):
+    return os.path.splitext(os.path.basename(path))[0]
+
+
+def default_workbook():
+    """The workbook path: $SKILLS_WORKBOOK, else the first *.xlsx in the current directory."""
+    env = os.environ.get("SKILLS_WORKBOOK")
+    if env:
+        return env
+    found = sorted(f for f in os.listdir(".") if f.lower().endswith(".xlsx"))
+    return found[0] if found else "skills-workbook.xlsx"
+
+
 def main(argv):
-    wb = argv[1] if len(argv) > 1 and not argv[1].startswith("--") else "the source skills workbook"
+    wb = argv[1] if len(argv) > 1 and not argv[1].startswith("--") else default_workbook()
     outp = "build/positions.json"
     if "--out" in argv:
         outp = argv[argv.index("--out") + 1]
@@ -113,6 +127,8 @@ def main(argv):
     if "--names" in argv:
         os.makedirs("build", exist_ok=True)
         toks = forbidden_names(wb)
+        with open("build/workbook-name.txt", "w", encoding="utf-8") as f:
+            f.write(workbook_basename(wb) + "\n")
         with open("build/forbidden-names.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(toks) + "\n")
         print(f"wrote build/forbidden-names.txt: {len(toks)} tokens")

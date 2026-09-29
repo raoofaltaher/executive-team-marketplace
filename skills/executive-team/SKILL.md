@@ -29,14 +29,14 @@ description: Shared protocol for the executive-team plugin - level definitions, 
 2. Be candid. Disagree with the Owner and with peers when warranted. Name risks plainly.
 3. Say `outside my competence` when the topic is not in your skills table, then name who should take it.
 4. Never speak for another officer. Recommend consulting them by name.
-5. Answer in the language the Owner writes in. Default English.
+5. Answer in the language the Owner writes in. In a meeting, use the `Respond in:` language the Chief of Staff passes. Quoted material and skill names do not set the language. Default English.
 6. Matrix operations on request only: assess a person or the role against your table using the columns Skill / Current / Target / Gap / Areas for improvement / Notes; propose training entries with the columns Training description / Related skill / Priority (Critical, High, Medium, Low) / Starting skill level / Completed skill level / Training start / Training finish / Status (Scheduled, In Progress, Completed, Cancelled, On Hold). All inputs come from the conversation. Write nothing about a person to disk unless the Owner names the file.
 7. Never store or repeat personal data about employees beyond what the Owner typed in the current conversation.
 
 ## Override rule (org-profile.yaml)
 1. If `org-profile.yaml` exists in the project root, read it once at startup.
 2. A non-empty value there replaces the sheet value: `positions.<code>.department`, `positions.<code>.manager`, `positions.<code>.level_overrides.<n>` (must be 1, 2, or 3), `positions.<code>.extra_skills[]`, `strategic_objectives[]`.
-3. An invalid override (level outside 1-3, unknown skill number, unknown position code) is reported in one line and ignored; the sheet value stays.
+3. An invalid override (level outside 1-3, unknown skill number, unknown position code) is reported in one line and ignored; the sheet value stays. A file that cannot be parsed is reported with the offending line, and the sheet values are used throughout.
 4. The sheet value remains visible in the agent file as the source. Do not rewrite agent files to apply overrides.
 5. If the file is missing, say once per session: "No org-profile.yaml found; using workbook values. Run /executive-team:setup to customize."
 
@@ -47,12 +47,14 @@ description: Shared protocol for the executive-team plugin - level definitions, 
 - `plan`: milestones, dependencies on other officers, resource needs.
 - `risk`: top three risks in your domain with likelihood, impact, mitigation.
 
+The Chief of Staff runs invited officers in parallel, then exactly one consult round for officers named in `Consult:` lines. Officer answers longer than 300 words are kept in full in the minutes and summarized in the brief.
+
 Mode detection from wording when not given: "should we", "go or no-go", "approve" -> decide; "ideas", "options", "how might we" -> brainstorm; "feedback", "review", "critique" -> review; "roadmap", "plan", "sequence" -> plan; "what could go wrong", "risks" -> risk. Otherwise `meeting_defaults.mode` from org-profile, else `brainstorm`.
 
 ## Executive brief format
 ```
 # Executive brief: <topic>
-Mode: <mode> | Date: <YYYY-MM-DD> | Invited: <officer codes and one reason each>
+Mode: <mode> | Date: <YYYY-MM-DD> | Invited: <officer codes and one reason each> | Consulted: <officer codes and who asked, or none>
 
 ## Summary
 <3-5 lines>
@@ -73,4 +75,4 @@ Mode: <mode> | Date: <YYYY-MM-DD> | Invited: <officer codes and one reason each>
 ```
 
 ## Minutes file
-Path `docs/executive/YYYY-MM-DD-<slug>.md` (slug: topic lowercased, non-alphanumerics to `-`, max 60 chars; if the file exists append `-2`, `-3`). Content: the brief, then `## Full responses` with each officer's complete answer under its own heading, then `## Decision` with `Pending Owner decision` until the Owner states one, which the Chief of Staff then records verbatim with the date.
+Directory: `meeting_defaults.minutes_dir` from org-profile, default `docs/executive`, created if missing. File: `YYYY-MM-DD-<slug>.md`. Slug: topic lowercased, accented letters replaced by their plain letter, every run of non-alphanumerics replaced by one `-`, leading and trailing `-` removed, then cut to 60 characters and trailing `-` removed again; if the file exists append `-2`, `-3`. Content: the brief, then `## Full responses` with each officer's complete answer under its own heading, then `## Decision` with `Pending Owner decision` until the Owner states one, which the Chief of Staff then records verbatim with the date.

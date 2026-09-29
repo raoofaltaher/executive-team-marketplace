@@ -1,6 +1,8 @@
 import os, sys, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
-WB = os.path.join(os.path.dirname(__file__), "..", "the source skills workbook")
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+_XLSX = sorted(f for f in os.listdir(_ROOT) if f.lower().endswith(".xlsx"))
+WB = os.environ.get("SKILLS_WORKBOOK") or (os.path.join(_ROOT, _XLSX[0]) if _XLSX else "")
 
 @unittest.skipUnless(os.path.exists(WB), "workbook not present")
 class ExtractTests(unittest.TestCase):
@@ -44,6 +46,10 @@ class ExtractTests(unittest.TestCase):
         self.assertTrue(all(len(t) >= 3 and t == t.lower() for t in tokens))
         # tokens must not be ordinary words from the skills tables
         self.assertNotIn("gestion", tokens)
+
+    def test_workbook_basename_helper(self):
+        from extract_positions import workbook_basename
+        self.assertEqual(workbook_basename("some/dir/My Book.xlsx"), "My Book")
 
 
 if __name__ == "__main__":

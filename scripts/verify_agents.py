@@ -49,6 +49,7 @@ def parse_officer(path):
     }
     obj = re.search(r"Status: TEMPLATE \(source cells (\S+)", text)
     o["objectives_cells"] = obj.group(1) if obj else "?"
+    o["missing_columns"] = sorted({m.group(1) for m in re.finditer(r"^- (Description|Associated tasks): column not present in source", text, re.M)})
     cur = None
     for line in text.splitlines():
         m = SKILL_RE.match(line)
@@ -133,6 +134,8 @@ def write_gaps(agents_dir, out_path):
             rows.append(f"| {c} | Position manager | {c} sheet, Position manager cell | org-profile.positions.{lc}.manager |")
         if o["objectives_template"]:
             rows.append(f"| {c} | Strategic objectives (TEMPLATE) | {o['objectives_cells']} | org-profile.strategic_objectives |")
+        for col in o["missing_columns"]:
+            rows.append(f"| {c} | {col} column | {c} sheet | column not present in source; edit the workbook |")
         for s in o["skills"]:
             if s["level"] is None:
                 rows.append(f"| {c} | Skill {s['n']} required level | {c}!{s['cells']} | org-profile.positions.{lc}.level_overrides.{s['n']} |")

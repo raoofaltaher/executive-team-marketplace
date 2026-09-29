@@ -37,6 +37,28 @@ class HygieneTests(unittest.TestCase):
             self.assertNotIn("tools:", fm)
             self.assertNotIn("model:", fm)
 
+    def test_orchestration_uses_namespaced_agents_and_plugin_root(self):
+        cos = open(os.path.join(ROOT, "agents", "chief-of-staff.md"), encoding="utf-8").read()
+        meet = open(os.path.join(ROOT, "commands", "meet.md"), encoding="utf-8").read()
+        skill = open(os.path.join(ROOT, "skills", "executive-team", "SKILL.md"), encoding="utf-8").read()
+        self.assertIn("executive-team:chief-of-staff", meet)
+        self.assertIn("${CLAUDE_PLUGIN_ROOT}", meet)
+        self.assertIn("executive-team:chief-financial-officer", cos)
+        self.assertIn("minutes_dir", cos)
+        self.assertIn("Respond in:", cos)
+        self.assertIn("Consulted:", skill)
+        for a in AGENTS[1:]:
+            t = open(os.path.join(ROOT, "agents", a + ".md"), encoding="utf-8").read()
+            self.assertIn("executive-team:executive-team", t, a)
+
+    @unittest.skipUnless(os.path.exists(os.path.join(ROOT, "build", "workbook-name.txt")), "build/workbook-name.txt not generated")
+    def test_workbook_filename_not_in_tracked_text(self):
+        name = open(os.path.join(ROOT, "build", "workbook-name.txt"), encoding="utf-8").read().strip()
+        self.assertTrue(name)
+        for f in self.tracked():
+            if f.endswith((".md", ".json", ".yaml", ".py", ".txt")):
+                self.assertNotIn(name, open(os.path.join(ROOT, f), encoding="utf-8", errors="ignore").read(), f)
+
     def test_generated_files_fresh(self):
         r = subprocess.run([sys.executable, "scripts/verify_agents.py", "--check"], cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)

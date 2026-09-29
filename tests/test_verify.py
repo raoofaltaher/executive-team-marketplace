@@ -48,6 +48,7 @@ class GenerateTests(unittest.TestCase):
             self.assertIn("org-profile.positions.smp.level_overrides.2", g)
             self.assertIn("Skill 2 flag: description duplicates skill 1 in source", g)
             self.assertIn("| SMP | Strategic objectives (TEMPLATE) | SMP!F11:G16 |", g)
+            self.assertIn("| SMP | Associated tasks column | SMP sheet | column not present in source; edit the workbook |", g)
 
 
 if __name__ == "__main__":

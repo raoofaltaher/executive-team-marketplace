@@ -1,5 +1,9 @@
 # executive-team
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/raoofaltaher/executive-team-marketplace/main/assets/plugin.png" alt="The executive team around the table: COO, CTO, CISO, CFO, CMO and CSO, with the Chief of Staff at the whiteboard and the executive brief on the wall. The head seat is yours, the Owner." width="800">
+</p>
+
 A Claude Code plugin that gives you an AI executive team: a COO, CISO, CTO, CMO, CSO and CFO, plus a Chief of Staff who runs the meeting. You are the Owner. You bring a real business case, the Chief of Staff invites the right officers, they answer in parallel as candid executives, and you get one executive brief with positions, disagreements, risks, a recommended decision and next steps. Minutes are saved so the team remembers what was decided.
 
 Every officer is built from a skills-by-position matrix: job title, required competencies, level per competency (1 Beginner, 2 Intermediate, 3 Expert), and associated tasks. The levels shape how each officer answers. Where the source matrix left fields blank, the plugin says so and lets you fill them for your own company.

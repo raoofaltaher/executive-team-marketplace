@@ -1,5 +1,9 @@
 # executive-team-marketplace
 
+<p align="center">
+  <img src="assets/plugin.png" alt="The executive team around the table: COO, CTO, CISO, CFO, CMO and CSO, with the Chief of Staff at the whiteboard and the executive brief on the wall. The head seat is yours, the Owner." width="800">
+</p>
+
 A Claude Code plugin marketplace. Its first plugin, **executive-team**, gives you an AI executive team (COO, CISO, CTO, CMO, CSO, CFO) and a Chief of Staff who runs the meeting. You are the Owner: you bring a real business case, the right officers answer in parallel as candid executives, and you get one executive brief with positions, disagreements, risks, a recommended decision, and saved minutes.
 
 ## Installation

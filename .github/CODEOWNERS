@@ -1,0 +1,3 @@
+# Every path requires review by the maintainer before merge.
+# Combined with the branch rulesets in docs/branch-protection.md, only this account can merge into dev and main.
+*   @raoofaltaher

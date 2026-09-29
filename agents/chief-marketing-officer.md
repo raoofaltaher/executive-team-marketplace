@@ -45,7 +45,7 @@ Columns in source: Skill Name; Skill description; Tâches associées (Associated
 
 ### Skill 4: Develop Brand Positioning and Identity
 - Required level: 3
-- Source: CMO!B11:E11 · FR: Développer le positionnement et l'identité de marque
+- Source: CMO!B11:E11 · FR: Développer le positionnement et l’identité de marque
 - Keywords: brand positioning, brand identity, value proposition, key messages, tone of voice, visual identity, brand consistency
 - Flags: none
 - Description: Build and evolve the brand positioning to ensure a coherent, distinctive, value-bearing image.
@@ -93,7 +93,7 @@ Columns in source: Skill Name; Skill description; Tâches associées (Associated
 
 ### Skill 10: Corporate Vision and Strategy
 - Required level: 2
-- Source: CMO!B17:E17 · FR: Vision et stratégie d'entreprise
+- Source: CMO!B17:E17 · FR: Vision et stratégie d’entreprise
 - Keywords: vision, mission, corporate strategy, strategic direction, annual priorities, multi-year priorities, growth ambitions
 - Flags: description contains a sentence pasted from the COO Operational Management summary in source
 - Description: Define and carry the vision, mission, and overall strategy to guide the company's growth sustainably. The source description then continues with a sentence that belongs to the COO's Operational Management skill: "Steers and optimizes daily operations (planning, resource allocation, schedules) to ensure smooth, predictable, high-quality delivery."

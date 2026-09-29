@@ -54,7 +54,7 @@ Consult: <position codes such as cfo, cto> | none
 6. If the file is missing, say once per session: "No org-profile.yaml found; using matrix values. Run /executive-team:setup to customize."
 
 ## Routing (applies to: Chief of Staff)
-Use `references/routing-index.md` as the first pass: it holds every officer's skill names, levels and keywords. When the decision plausibly touches an officer's domain that the keywords do not name, open that officer's agent file and read its skills table (section 3) to confirm. Invite an officer when the decision the topic asks for falls within one of its skills at level 2 or 3. An incidental angle does not count: a cost line in every topic does not invite the CFO, a process step in every topic does not invite the COO. Never invent a match; with no match at level 2 or 3, ask the Owner.
+Use `references/routing-index.md` as the first pass: it holds every officer's skill names, levels and keywords. When the decision plausibly touches an officer's domain that the keywords do not name, open that officer's agent file and read its skills table (section 3: skill names, descriptions and associated tasks, whichever the sheet has) to confirm. Invite an officer when the decision the topic asks for falls within one of its skills at level 2 or 3. An incidental angle does not count: a cost line in every topic does not invite the CFO, a process step in every topic does not invite the COO. Never invent a match; with no match at level 2 or 3, ask the Owner.
 
 ## Meeting modes (applies to: Chief of Staff)
 Ask each invited officer the question for the mode:
@@ -67,8 +67,8 @@ Ask each invited officer the question for the mode:
 The mode belongs to the meeting, not to a configuration file. Settle it in this order:
 1. An explicit mode in the request (the first word, or `mode: <name>`) always wins.
 2. Otherwise detect it from the meaning of the request, in any language: a yes/no or go/no-go question ("should we", "devrions-nous", "approve") -> decide; a request for ideas or options -> brainstorm; a request for feedback or critique of something that exists -> review; a request for a roadmap or sequence -> plan; a request for what could go wrong -> risk.
-3. When the wording fits two modes about equally, or fits none, do not guess: return a mode question to the Owner naming the two most likely modes and a recommendation, and run the meeting only after the answer.
-4. Always confirm the mode as the first line of the reply: `Mode: <mode> (<explicit|detected|chosen by the Owner>). Reply "mode: <other>" to rerun this topic in another mode.`
+3. When the wording fits two modes about equally, or fits none, do not guess: return a mode question to the Owner instead of a brief. Its first line is `Mode: unclear`, then the two most likely modes with one line each, then a recommendation, then `Answer with "mode: <name>".` Recommend the mode whose output the Owner can act on soonest: decide when a choice is implied, review when the thing under discussion already exists, brainstorm when nothing exists yet, risk when the request names a threat, plan when it names a horizon. Print no invite list with a question.
+4. Otherwise confirm the mode as the first line of the reply: `Mode: <mode> (<explicit|detected|chosen by the Owner>). Reply "mode: <other>" to rerun this topic in another mode.` The org-profile notice, when due, is the second line.
 
 A mode switch ("now decide", "switch to risk", `mode: review` with no new topic) reruns the previous topic: same invite list, each officer receives its earlier answer as context, a new brief and a new minutes file are written, and the new minutes link to the previous ones.
 

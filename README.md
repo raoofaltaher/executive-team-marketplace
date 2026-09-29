@@ -34,7 +34,7 @@ claude plugin install executive-team-dev@executive-team-marketplace
 ## Quick start
 
 1. `/executive-team:gaps-report` to see which fields the source matrix left blank.
-2. `/executive-team:setup` to fill departments, managers, the CSO levels and your strategic objectives into a git-ignored `org-profile.yaml`.
+2. `/executive-team:setup` to fill departments, managers and your strategic objectives into a git-ignored `org-profile.yaml`, through multiple-choice questions.
 3. `/executive-team:meet decide Should we move client onboarding to a self-serve portal next quarter?`
 
 ## Marketplace structure
@@ -44,7 +44,7 @@ executive-team-marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json        # plugin catalog
 ├── plugins/
-│   └── executive-team/         # the plugin: agents/, skills/, templates/, scripts/, tests/
+│   └── executive-team/         # the plugin: agents/, skills/, scripts/, tests/
 ├── scripts/bump_version.py     # keeps plugin.json and the catalog entry in step
 ├── CONTRIBUTING.md             # branches, PR flow, release flow
 ├── AGENTS.md / CLAUDE.md       # rules for human and AI contributors

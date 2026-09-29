@@ -45,9 +45,17 @@ class HygieneTests(unittest.TestCase):
         self.assertIn("Respond in:", cos)
         self.assertIn("Consulted:", skill)
         self.assertIn("## Officer answer format", skill)
-        for f in (cos, skill, meet, read("templates", "org-profile.yaml"), read("skills", "setup", "SKILL.md")):
+        setup = read("skills", "setup", "SKILL.md")
+        template = read("skills", "setup", "org-profile.template.yaml")
+        for f in (cos, skill, meet, template, setup):
             self.assertNotIn("meeting_defaults.mode", f)
             self.assertNotIn("mode: brainstorm", f)
+        self.assertFalse(os.path.exists(os.path.join(ROOT, "templates")), "template lives inside skills/setup now")
+        self.assertIn("AskUserQuestion", setup)
+        self.assertIn("multiple-choice", setup)
+        cso = read("agents", "chief-sales-officer.md")
+        self.assertNotIn("answers at level 1", cso)
+        self.assertIn("(plugin default; not specified in source)", cso)
         self.assertIn('Reply "mode: <other>"', skill)
         self.assertIn("Previous meeting:", cos)
         self.assertIn("AskUserQuestion", meet)

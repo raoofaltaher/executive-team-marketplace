@@ -53,6 +53,30 @@ class StructureTests(unittest.TestCase):
         self.assertTrue(any("source sheet XXX" in e for e in errs), errs)
 
 
+class PluginDefaultLevelTests(unittest.TestCase):
+    def test_plugin_default_level_counts_as_level_and_is_registered(self):
+        text = fixture_text().replace("- Required level: not specified in source",
+                                      "- Required level: 2 (plugin default; not specified in source)")
+        with tempfile.TemporaryDirectory() as d:
+            agents = os.path.join(d, "agents")  # generated files must not land in the agents folder
+            os.makedirs(agents)
+            p = os.path.join(agents, "o.md")
+            with open(p, "w", encoding="utf-8") as fh:
+                fh.write(text)
+            o = parse_officer(p)
+            self.assertEqual(o["skills"][1]["level"], 2)
+            self.assertTrue(o["skills"][1]["plugin_default"])
+            self.assertEqual(check_structure(o), [])
+            idx = os.path.join(d, "i.md"); gaps = os.path.join(d, "g.md")
+            write_index(agents, idx); write_gaps(agents, gaps)
+            with open(idx, encoding="utf-8") as fh:
+                self.assertIn("| SMP | chief-sample-officer | 2 | Second Thing | 2 | second |", fh.read())
+            with open(gaps, encoding="utf-8") as fh:
+                g = fh.read()
+            self.assertIn("| SMP | Skill 2 required level is a plugin default (2); source has none |", g)
+            self.assertNotIn("| SMP | Skill 2 required level |", g)
+
+
 class GenerateTests(unittest.TestCase):
     def test_index_and_gaps(self):
         with tempfile.TemporaryDirectory() as d:

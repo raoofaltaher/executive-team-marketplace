@@ -1,5 +1,14 @@
 # Release Notes
 
+## v0.1.1 (2026-09-30)
+
+### executive-team
+
+- The CSO now ships default required levels (sales-domain skills 3; executive leadership and corporate vision 2, matching the identical CMO skills). The source matrix has none, so each is marked `plugin default` in the agent file and in the gaps register; override any of them in `org-profile.positions.cso.level_overrides`. Setup no longer asks for them, and the CSO is now invited to meetings on its own merits.
+- `/executive-team:setup` runs as an interactive multiple-choice interview: defaults are offered first, free text stays available through "Other", related questions are grouped. It no longer asks for a default meeting mode.
+- The org-profile template moved into the setup skill's folder, so every harness can read it; the skill also resolves the gaps register and routing index relative to its own folder when the plugin-root variable is not substituted.
+- The meeting mode is settled per meeting: explicit, detected from the request, or asked with a recommendation when unclear; confirmed in the first line of every reply; "now decide" or "mode: risk" reruns the last topic in another mode.
+
 ## v0.1.0 (2026-09-29)
 
 First release of the `executive-team` plugin and this marketplace.

@@ -64,17 +64,18 @@ Ask each invited officer the question for the mode:
 - `plan`: milestones, dependencies on other officers, resource needs.
 - `risk`: top three risks in your domain with likelihood, impact, mitigation.
 
-Detect the mode from wording when it is not given: "should we", "go or no-go", "approve" -> decide; "ideas", "options", "how might we" -> brainstorm; "feedback", "review", "critique" -> review; "roadmap", "plan", "sequence" -> plan; "what could go wrong", "risks" -> risk. Otherwise use `meeting_defaults.mode` from org-profile, else `brainstorm`.
+Detect the mode from the meaning of the request when it is not given, in any language: a yes/no or go/no-go question ("should we", "devrions-nous", "approve") -> decide; a request for ideas or options -> brainstorm; a request for feedback or critique of something that exists -> review; a request for a roadmap or sequence -> plan; a request for what could go wrong -> risk. Otherwise use `meeting_defaults.mode` from org-profile, else `brainstorm`.
 
-Run invited officers in parallel, then exactly one consult round for officers named in `Consult:` lines. Keep officer answers longer than 300 words in full in the minutes and summarize them in the brief.
+Run invited officers in parallel, then exactly one consult round for officers named in `Consult:` lines. A consult target qualifies when the requesting officer's stated reason falls within one of the target's skills at level 2 or 3; judge by that reason together with the topic. Keep officer answers longer than 300 words in full in the minutes and summarize them in the brief.
 
 ## Executive brief format (applies to: Chief of Staff)
-Write every section. Write `None.` under a section with nothing to report.
+Write every section. Write `None.` under a section with nothing to report. Section headings, the header labels (`Mode`, `Date`, `Invited`, `Consulted`), and the literal tokens `None.`, `no response`, `Uninvited perspective:`, `Confidence:`, `Consult:` and `Pending Owner decision` stay in English in every meeting language; only the prose is written in the meeting language.
 ```
 # Executive brief: <topic>
 Mode: <mode> | Date: <YYYY-MM-DD>
-Invited: <officer codes, one reason each>
+Invited: <officer codes, one reason each; or "none" with the officers that had no relevant skill at any level>
 Consulted: <officer codes and who asked> | none
+Not consulted: <Consult targets rejected and why (level 0 or 1, no relevant skill, already invited)> | none
 
 ## Summary
 <3-5 lines>

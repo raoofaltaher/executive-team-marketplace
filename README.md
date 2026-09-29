@@ -84,15 +84,17 @@ The officers were built from a skills-by-position workbook (six sheets: COO, CIS
 
 Gaps and defects found in the source are reproduced as-is and flagged, never silently fixed. They are listed in `skills/executive-team/references/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels, an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets).
 
-## Working with the source workbook
+## Maintainers only: the source workbook
 
-A directory install (`claude --plugin-dir`, or the local marketplace in `.claude/settings.json`) copies the whole folder into the plugin cache. Keep the workbook outside this folder in a private location and set the `SKILLS_WORKBOOK` environment variable to its full path (on Windows: `setx SKILLS_WORKBOOK "<path>"`, then open a new terminal). The scripts and tests read that variable first and fall back to the first `.xlsx` in the current directory. Delete `build/` after generating; a git-based install is protected by `.gitignore`.
+Users of the plugin never need the workbook. The agents and skills are self-contained and read nothing outside the plugin at runtime. The workbook is only used by the maintainer scripts below to regenerate the routing index and to verify that the officer files still match the source sheets.
+
+Keep the workbook outside this folder in a private location (a directory install copies the whole folder into the plugin cache) and set the `SKILLS_WORKBOOK` environment variable to its full path on the maintainer's machine only. The scripts and tests read that variable first and fall back to the first `.xlsx` in the current directory; without a workbook the fidelity tests skip and everything else works. Delete `build/` after generating.
 
 ## Privacy
 
 The plugin holds positions, not people. No employee names, ratings, reviews or training records exist in this repository, and the agents are instructed never to store personal data. Assessments and training plans use only what you type in the conversation.
 
-## Development
+## Development (maintainers)
 
 ```
 python scripts/extract_positions.py           # workbook -> build/positions.json (workbook: $SKILLS_WORKBOOK or the first *.xlsx here)

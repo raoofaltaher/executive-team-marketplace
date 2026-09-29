@@ -1,0 +1,6 @@
+{
+  "extraKnownMarketplaces": {
+    "executive-team": { "source": { "source": "directory", "path": "./" } }
+  },
+  "enabledPlugins": { "executive-team@executive-team": true }
+}

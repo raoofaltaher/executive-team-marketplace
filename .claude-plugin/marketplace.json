@@ -1,0 +1,13 @@
+{
+  "name": "executive-team",
+  "owner": { "name": "RAOOF A." },
+  "metadata": { "description": "Marketplace hosting the executive-team plugin", "version": "0.1.0" },
+  "plugins": [
+    {
+      "name": "executive-team",
+      "description": "AI executive team built from a skills-by-position matrix",
+      "source": "./",
+      "strict": false
+    }
+  ]
+}

@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Create the branch rulesets described in docs/branch-protection.md.
-# Usage: bash scripts/protect-branches.sh owner/repo
-# Requires: gh (GitHub CLI) authenticated as the repository owner.
 set -euo pipefail
 REPO="${1:?usage: protect-branches.sh owner/repo}"
 

@@ -18,7 +18,7 @@ Every officer is built from a skills-by-position matrix: job title, required com
 | `chief-sales-officer` | Director of Sales (CSO) | 11 |
 | `chief-financial-officer` | Director of Finance (CFO) | 9 |
 
-**Commands** (`commands/`)
+**User-invoked skills** (`skills/meet`, `skills/setup`, `skills/gaps-report`)
 
 | Command | What it does |
 |---|---|
@@ -26,7 +26,7 @@ Every officer is built from a skills-by-position matrix: job title, required com
 | `/executive-team:setup` | Interviews you and writes `org-profile.yaml`: departments, managers, missing levels, strategic objectives, extra skills. |
 | `/executive-team:gaps-report` | Lists every gap in the source matrix and which ones your org-profile still leaves unfilled. |
 
-**Skill** (`skills/executive-team/`): the shared protocol (level definitions, behaviour rules, meeting modes, brief format, override rule), the generated `routing-index.md` (officer x skill x level x keywords) and the generated `gaps-register.md`.
+**Shared skill** (`skills/executive-team/`): the protocol (level definitions, behaviour rules, officer answer format, meeting modes, brief and minutes formats, override rule) with `references/routing-index.md` and `references/gaps-register.md` (both generated) and `references/matrix-operations.md`.
 
 ## Install
 
@@ -82,7 +82,11 @@ A non-empty value in the profile overrides the matrix value; the matrix value st
 
 The officers were built from a skills-by-position workbook (six sheets: COO, CISO, CTO, CMO, CSO, CFO). Every skill in an agent file carries a source pointer with the sheet, the cell range and the original French skill name, so any line can be traced back. The workbook itself and any org-profile are never committed.
 
-Gaps and defects found in the source are reproduced as-is and flagged, never silently fixed. They are listed in `skills/executive-team/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels, an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets).
+Gaps and defects found in the source are reproduced as-is and flagged, never silently fixed. They are listed in `skills/executive-team/references/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels, an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets).
+
+## Working with the source workbook
+
+A directory install (`claude --plugin-dir`, or the local marketplace in `.claude/settings.json`) copies the whole folder into the plugin cache. Keep the workbook outside this folder and point `SKILLS_WORKBOOK` at it before installing that way, and delete `build/` after generating; a git-based install is protected by `.gitignore`.
 
 ## Privacy
 
@@ -97,7 +101,7 @@ python scripts/verify_agents.py               # check agents against the workboo
 python scripts/verify_agents.py --check       # fail if the generated files are stale
 python -m unittest discover -s tests          # full suite
 claude plugin validate . --strict             # manifests
-claude plugin validate agents --strict        # also: commands, skills
+claude plugin validate agents --strict        # also: skills
 ```
 
 ## Roadmap

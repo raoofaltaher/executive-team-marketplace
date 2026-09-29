@@ -214,6 +214,10 @@ The project becomes a git repository intended for GitHub. The goal is a public p
 - A permissive open-source `LICENSE` file (MIT) is included so the plugin can be published; the Owner can change it before publishing.
 - Portability to other agents is out of scope for this build, but the content layout keeps agent bodies as plain markdown so they can be reused elsewhere.
 
+### 6.2 Best-practice audit addendum (2026-09-29)
+
+After the plugin-dev review: the three commands moved to `skills/meet`, `skills/setup`, `skills/gaps-report` (the preferred layout for user-invoked skills; invocation names unchanged), each with `allowed-tools`; agents carry `model: inherit` and a `color`, a trigger-style description and a "When to invoke" section; officer section 5 is a second-person system prompt; the generated index and register live under `skills/executive-team/references/` with `matrix-operations.md`; the shared skill defines the officer answer format and the routing rule (index first, officer skills table to confirm). Sections 1 to 4 of every officer remain verbatim workbook content.
+
 ## 7. Error handling
 
 - Missing org-profile: agents run on sheet values and say so once per session.

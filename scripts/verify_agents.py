@@ -28,9 +28,10 @@ def _fm(text):
             fm[k.strip()] = v.strip()
     if "name" not in fm or "description" not in fm:
         raise ValueError("frontmatter needs name and description")
-    for bad in ("tools", "model"):
-        if bad in fm:
-            raise ValueError(f"frontmatter must not set {bad}")
+    if "tools" in fm:
+        raise ValueError("frontmatter must not set tools (officers inherit all tools by Owner decision)")
+    if fm.get("model", "inherit") != "inherit":
+        raise ValueError("frontmatter model must be 'inherit' or omitted")
     return fm
 
 
@@ -157,8 +158,10 @@ def main(argv):
         errs = verify(agents, json.load(open(pj, encoding="utf-8")))
     else:
         print("build/positions.json not found; skipping workbook comparison (run scripts/extract_positions.py)")
-    idx = os.path.join(skill, "routing-index.md")
-    gaps = os.path.join(skill, "gaps-register.md")
+    refs = os.path.join(skill, "references")
+    os.makedirs(refs, exist_ok=True)
+    idx = os.path.join(refs, "routing-index.md")
+    gaps = os.path.join(refs, "gaps-register.md")
     if "--check" in argv:
         with tempfile.TemporaryDirectory() as d:
             ti, tg = os.path.join(d, "i.md"), os.path.join(d, "g.md")

@@ -18,6 +18,25 @@ class ParseTests(unittest.TestCase):
         self.assertTrue(o["department_missing"]); self.assertTrue(o["manager_missing"]); self.assertTrue(o["objectives_template"])
 
 
+class FrontmatterTests(unittest.TestCase):
+    def _with_fm(self, extra):
+        with open(os.path.join(FIX, "sample-officer.md"), encoding="utf-8") as fh:
+            src = fh.read()
+        marker = "description: Sample officer for tests.\n"
+        return src.replace(marker, marker + extra)
+
+    def test_model_inherit_allowed_other_models_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            ok = os.path.join(d, "ok.md"); bad = os.path.join(d, "bad.md")
+            with open(ok, "w", encoding="utf-8") as fh:
+                fh.write(self._with_fm("model: inherit\ncolor: blue\n"))
+            with open(bad, "w", encoding="utf-8") as fh:
+                fh.write(self._with_fm("model: opus\n"))
+            self.assertEqual(parse_officer(ok)["name"], "chief-sample-officer")
+            with self.assertRaises(ValueError):
+                parse_officer(bad)
+
+
 class VerifyTests(unittest.TestCase):
     def test_verify_against_positions(self):
         positions = {"smp": {"sheet": "SMP", "skills": [

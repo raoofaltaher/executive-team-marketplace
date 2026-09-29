@@ -74,6 +74,34 @@ def extract(path):
     return out
 
 
+# Cells that hold people's names in the workbook's team sheets. Only used to build the
+# git-ignored forbidden-names list; the names themselves are never written to tracked files.
+PEOPLE_CELLS = {
+    "Skill Matrix": ["I5"] + [f"F{r}" for r in range(27, 67)],
+    "Training Log": ["I5"] + [f"F{r}" for r in range(16, 61)],
+    "Team Member Review": ["C6", "W6", "AS9"],
+}
+
+
+def forbidden_names(path):
+    """Return lowercase name tokens (3+ chars) found in the workbook's people cells, sorted and unique."""
+    wb = openpyxl.load_workbook(path, data_only=True)
+    tokens = set()
+    for sheet, cells in PEOPLE_CELLS.items():
+        if sheet not in wb.sheetnames:
+            continue
+        ws = wb[sheet]
+        for c in cells:
+            v = _s(ws[c].value)
+            if not v or v.startswith("#"):
+                continue
+            for tok in v.replace("-", " ").split():
+                tok = tok.strip(".,;:()").lower()
+                if len(tok) >= 3:
+                    tokens.add(tok)
+    return sorted(tokens)
+
+
 def main(argv):
     wb = argv[1] if len(argv) > 1 and not argv[1].startswith("--") else "the source skills workbook"
     outp = "build/positions.json"
@@ -82,6 +110,13 @@ def main(argv):
     if not os.path.exists(wb):
         print(f"workbook not found: {wb}")
         return 2
+    if "--names" in argv:
+        os.makedirs("build", exist_ok=True)
+        toks = forbidden_names(wb)
+        with open("build/forbidden-names.txt", "w", encoding="utf-8") as f:
+            f.write("\n".join(toks) + "\n")
+        print(f"wrote build/forbidden-names.txt: {len(toks)} tokens")
+        return 0
     data = extract(wb)
     os.makedirs(os.path.dirname(outp), exist_ok=True)
     with open(outp, "w", encoding="utf-8") as f:

@@ -37,5 +37,14 @@ class ExtractTests(unittest.TestCase):
             self.assertEqual(len(v["objectives_examples"]), 4)
             self.assertTrue(all(p[0].startswith("Ex:") for p in v["objectives_examples"]))
 
+    def test_forbidden_names_tokens_come_from_people_cells(self):
+        from extract_positions import forbidden_names
+        tokens = forbidden_names(WB)
+        self.assertGreaterEqual(len(tokens), 4)
+        self.assertTrue(all(len(t) >= 3 and t == t.lower() for t in tokens))
+        # tokens must not be ordinary words from the skills tables
+        self.assertNotIn("gestion", tokens)
+
+
 if __name__ == "__main__":
     unittest.main()

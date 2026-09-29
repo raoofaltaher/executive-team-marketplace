@@ -14,7 +14,6 @@ SRC_RE = re.compile(r"^([A-Z]+)!([A-Z]+\d+:[A-Z]+\d+) · FR: (.+)$")
 SKILL_RE = re.compile(r"^### Skill (\d+): (.+)$")
 FM_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 LEVEL_VALUES = ("1", "2", "3", "not specified in source")
-# A level the plugin ships for a skill whose source cell is empty, e.g. "3 (plugin default; not specified in source)"
 DEFAULT_LEVEL_RE = re.compile(r"^([123]) \(plugin default; not specified in source\)$")
 
 

@@ -27,7 +27,7 @@ class HygieneTests(unittest.TestCase):
             self.assertTrue(t.startswith("---\nname: " + a + "\n"), a)
             fm = t.split("---")[1]
             self.assertIn("description:", fm)
-            self.assertNotIn("tools:", fm)  # Owner decision: officers inherit all tools
+            self.assertNotIn("tools:", fm)
             self.assertIn("model: inherit", fm)
             self.assertRegex(fm, r"\ncolor: (blue|cyan|green|yellow|magenta|red)\n")
             self.assertRegex(fm, r'description: Use this agent when .*Typical triggers include .*See "When to invoke"')

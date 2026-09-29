@@ -58,7 +58,7 @@ class PluginDefaultLevelTests(unittest.TestCase):
         text = fixture_text().replace("- Required level: not specified in source",
                                       "- Required level: 2 (plugin default; not specified in source)")
         with tempfile.TemporaryDirectory() as d:
-            agents = os.path.join(d, "agents")  # generated files must not land in the agents folder
+            agents = os.path.join(d, "agents")
             os.makedirs(agents)
             p = os.path.join(agents, "o.md")
             with open(p, "w", encoding="utf-8") as fh:

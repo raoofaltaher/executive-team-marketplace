@@ -1,13 +1,14 @@
 {
+  "enabledPlugins": {
+    "executive-team@executive-team-marketplace": true
+  },
   "extraKnownMarketplaces": {
     "executive-team-marketplace": {
       "source": {
         "source": "directory",
         "path": "./"
-      }
+      },
+      "autoUpdate": true
     }
-  },
-  "enabledPlugins": {
-    "executive-team@executive-team-marketplace": true
   }
 }

@@ -1,0 +1,47 @@
+# executive-team plugin: organization profile
+# Copy to the project root as org-profile.yaml (git-ignored) or run /executive-team:setup.
+# Empty strings mean "use the workbook value". Levels must be 1, 2, or 3.
+company:
+  name: ""
+  owner_title: "Owner"
+
+positions:
+  coo:
+    department: ""
+    manager: "Owner"
+    level_overrides: {}        # e.g. { 4: 2 }
+    extra_skills: []           # e.g. - { skill: "...", description: "...", tasks: "...", level: 2 }
+  ciso:
+    department: ""
+    manager: "Owner"
+    level_overrides: {}
+    extra_skills: []
+  cto:
+    department: ""
+    manager: "Owner"
+    level_overrides: {}
+    extra_skills: []
+  cmo:
+    department: ""
+    manager: "Owner"
+    level_overrides: {}
+    extra_skills: []
+  cso:
+    department: ""
+    manager: "Owner"
+    level_overrides: {}        # the workbook has no CSO levels; set all 11 here, e.g. { 1: 3, 2: 3, ... }
+    extra_skills: []
+  cfo:
+    department: ""
+    manager: "Owner"
+    level_overrides: {}
+    extra_skills: []
+
+strategic_objectives: []
+# - id: SO1
+#   name: "SME customer growth"
+#   critical_skills: ["cso.2", "cmo.6", "coo.5"]   # <position code>.<skill number>
+
+meeting_defaults:
+  mode: brainstorm             # brainstorm | decide | review | plan | risk
+  minutes_dir: docs/executive

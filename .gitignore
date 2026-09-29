@@ -5,7 +5,7 @@
 # source workbook (contains employee data; never commit)
 *.xlsx
 # company-specific configuration and meeting minutes
-org-profile.yaml
+/org-profile.yaml
 docs/executive/
 # build artifacts
 build/

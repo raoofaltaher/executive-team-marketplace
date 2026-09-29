@@ -86,7 +86,7 @@ Gaps and defects found in the source are reproduced as-is and flagged, never sil
 
 ## Working with the source workbook
 
-A directory install (`claude --plugin-dir`, or the local marketplace in `.claude/settings.json`) copies the whole folder into the plugin cache. Keep the workbook outside this folder and point `SKILLS_WORKBOOK` at it before installing that way, and delete `build/` after generating; a git-based install is protected by `.gitignore`.
+A directory install (`claude --plugin-dir`, or the local marketplace in `.claude/settings.json`) copies the whole folder into the plugin cache. Keep the workbook outside this folder in a private location and set the `SKILLS_WORKBOOK` environment variable to its full path (on Windows: `setx SKILLS_WORKBOOK "<path>"`, then open a new terminal). The scripts and tests read that variable first and fall back to the first `.xlsx` in the current directory. Delete `build/` after generating; a git-based install is protected by `.gitignore`.
 
 ## Privacy
 

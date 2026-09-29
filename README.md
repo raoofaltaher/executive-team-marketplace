@@ -78,30 +78,20 @@ meeting_defaults: { mode: brainstorm, minutes_dir: docs/executive }
 
 A non-empty value in the profile overrides the matrix value; the matrix value stays visible in the agent file as the source. The CSO sheet in the source has no required levels, so set all 11 in `positions.cso.level_overrides` (the setup command offers "all 3" or "all 2" as shortcuts). Until then the CSO answers everything at level 1 and says so.
 
-## Source and fidelity
+## Source and traceability
 
-The officers were built from a skills-by-position workbook (six sheets: COO, CISO, CTO, CMO, CSO, CFO). Every skill in an agent file carries a source pointer with the sheet, the cell range and the original French skill name, so any line can be traced back. The workbook itself and any org-profile are never committed.
-
-Gaps and defects found in the source are reproduced as-is and flagged, never silently fixed. They are listed in `skills/executive-team/references/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels, an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets).
-
-## Maintainers only: the source workbook
-
-Users of the plugin never need the workbook. The agents and skills are self-contained and read nothing outside the plugin at runtime. The workbook is only used by the maintainer scripts below to regenerate the routing index and to verify that the officer files still match the source sheets.
-
-Keep the workbook outside this folder in a private location (a directory install copies the whole folder into the plugin cache) and set the `SKILLS_WORKBOOK` environment variable to its full path on the maintainer's machine only. The scripts and tests read that variable first and fall back to the first `.xlsx` in the current directory; without a workbook the fidelity tests skip and everything else works. Delete `build/` after generating.
+The six officers were built from a skills-by-position matrix: one sheet per position with the job title, every required competency, its description and tasks, and the required level. Each skill in an agent file carries a source pointer (sheet, cell range, original French skill name) so any line can be traced to the matrix it came from. Fields the matrix left blank are marked `not specified in source` rather than filled in; defects in the matrix are reproduced and flagged rather than corrected. They are listed in `skills/executive-team/references/gaps-register.md`: empty department and manager fields, placeholder-only strategic objectives, no CSO levels, an empty tasks cell for the CFO's first skill, a duplicated description on the COO's fourth skill, a pasted sentence in the CMO's and CSO's "Corporate Vision and Strategy" descriptions, and columns some sheets lack (no description column on the CFO sheet, no tasks column on the COO, CISO and CTO sheets). Fill them for your company with `/executive-team:setup`.
 
 ## Privacy
 
-The plugin holds positions, not people. No employee names, ratings, reviews or training records exist in this repository, and the agents are instructed never to store personal data. Assessments and training plans use only what you type in the conversation.
+The plugin holds positions, not people. No employee names, ratings, reviews or training records exist in this repository, and the agents are instructed never to store personal data. Assessments and training plans use only what you type in the conversation. `org-profile.yaml` and meeting minutes are git-ignored.
 
-## Development (maintainers)
+## Development
 
 ```
-python scripts/extract_positions.py           # workbook -> build/positions.json (workbook: $SKILLS_WORKBOOK or the first *.xlsx here)
-python scripts/extract_positions.py --names   # workbook -> build/forbidden-names.txt for the hygiene test
-python scripts/verify_agents.py               # check agents against the workbook, regenerate index and register
-python scripts/verify_agents.py --check       # fail if the generated files are stale
-python -m unittest discover -s tests          # full suite
+python scripts/build_references.py            # check the officer files and regenerate the routing index and gaps register
+python scripts/build_references.py --check    # fail if the generated references are stale
+python -m unittest discover -s tests          # test suite
 claude plugin validate . --strict             # manifests
 claude plugin validate agents --strict        # also: skills
 ```

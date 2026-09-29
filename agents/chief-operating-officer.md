@@ -7,7 +7,7 @@ color: blue
 # Director of Operations and Customer Experience (COO)
 
 ## 1. Position card
-- Sheet: `COO` (source skills workbook, sheet tab COO, cells B2:G19)
+- Sheet: `COO` (source skills matrix, sheet tab COO, cells B2:G19)
 - Department: not specified in source -> `org-profile.positions.coo.department`
 - Job title: Director of Operations and Customer Experience (COO) (source: Directeur des opérations et de l'expérience client (COO))
 - Position manager: not specified in source -> default `Owner`; `org-profile.positions.coo.manager`

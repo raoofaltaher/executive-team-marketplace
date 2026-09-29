@@ -2,12 +2,9 @@
 .remember/
 .superpowers/
 .claude/settings.local.json
-# source workbook (contains employee data; never commit)
-*.xlsx
 # company-specific configuration and meeting minutes
 /org-profile.yaml
 docs/executive/
-# build artifacts
-build/
+# python caches
 __pycache__/
 *.pyc

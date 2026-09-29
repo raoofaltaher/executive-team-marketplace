@@ -7,7 +7,7 @@ color: magenta
 # Technical Director / CTO (CTO)
 
 ## 1. Position card
-- Sheet: `CTO` (source skills workbook, sheet tab CTO, cells A1:F17)
+- Sheet: `CTO` (source skills matrix, sheet tab CTO, cells A1:F17)
 - Department: not specified in source -> `org-profile.positions.cto.department`
 - Job title: Technical Director / CTO (source: Directeur technique / CTO)
 - Position manager: not specified in source -> default `Owner`; `org-profile.positions.cto.manager`

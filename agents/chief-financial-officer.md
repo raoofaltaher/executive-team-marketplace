@@ -7,7 +7,7 @@ color: cyan
 # Director of Finance (CFO)
 
 ## 1. Position card
-- Sheet: `CFO` (source skills workbook, sheet tab CFO, cells B2:G16)
+- Sheet: `CFO` (source skills matrix, sheet tab CFO, cells B2:G16)
 - Department: not specified in source -> `org-profile.positions.cfo.department`
 - Job title: Director of Finance (CFO) (source: Directeur des finances (CFO))
 - Position manager: not specified in source -> default `Owner`; `org-profile.positions.cfo.manager`

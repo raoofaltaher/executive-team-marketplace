@@ -9,7 +9,7 @@ Create or update `org-profile.yaml` in the current project root for the executiv
 Plugin root: `${CLAUDE_PLUGIN_ROOT}`. Plugin files below are relative to it; `org-profile.yaml` lives in the current project root.
 
 1. If `org-profile.yaml` exists, read it and report which fields are already filled. Otherwise start from `${CLAUDE_PLUGIN_ROOT}/templates/org-profile.yaml`.
-2. Read `${CLAUDE_PLUGIN_ROOT}/skills/executive-team/references/gaps-register.md` to know what the workbook left blank.
+2. Read `${CLAUDE_PLUGIN_ROOT}/skills/executive-team/references/gaps-register.md` to know what the matrix left blank.
 3. Ask one topic at a time, use AskUserQuestion when options exist, and accept "skip" for any item:
    a. Company name and the Owner's title (default "Owner").
    b. For each position (COO, CISO, CTO, CMO, CSO, CFO): department name; manager (default Owner).
@@ -19,7 +19,7 @@ Plugin root: `${CLAUDE_PLUGIN_ROOT}`. Plugin files below are relative to it; `or
    f. Extra skills per position (skill, description, tasks, level), if any.
    g. Meeting defaults: default mode and minutes directory.
 4. Validate: every level is 1, 2, or 3; every critical-skill reference matches an officer skill number in the routing index; position codes are among the six. Report each invalid entry and ask again or drop it.
-5. Write `org-profile.yaml`. Take the YAML comments from the template on every write, so an updated file keeps the documentation even when the existing file lacked it. Show a summary table of what is set and what still reads "use workbook value".
+5. Write `org-profile.yaml`. Take the YAML comments from the template on every write, so an updated file keeps the documentation even when the existing file lacked it. Show a summary table of what is set and what still reads "use matrix value".
 6. Confirm that `.gitignore` in the project lists `/org-profile.yaml`; if the project has a `.gitignore` without it, say so and offer to add the line.
 
 Never ask for or record information about individual employees (names, ratings, training history).

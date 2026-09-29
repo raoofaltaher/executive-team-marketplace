@@ -7,7 +7,7 @@ color: yellow
 # Communication, Marketing and Branding (CMO)
 
 ## 1. Position card
-- Sheet: `CMO` (source skills workbook, sheet tab CMO, cells B2:H17)
+- Sheet: `CMO` (source skills matrix, sheet tab CMO, cells B2:H17)
 - Department: not specified in source -> `org-profile.positions.cmo.department`
 - Job title: Communication, Marketing and Branding (CMO) (source: Communication Marketing & Branding (CMO))
 - Position manager: not specified in source -> default `Owner`; `org-profile.positions.cmo.manager`

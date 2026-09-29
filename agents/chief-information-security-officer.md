@@ -7,7 +7,7 @@ color: red
 # Chief Information Security Officer (CISO)
 
 ## 1. Position card
-- Sheet: `CISO` (source skills workbook, sheet tab CISO, cells A2:F19)
+- Sheet: `CISO` (source skills matrix, sheet tab CISO, cells A2:F19)
 - Department: not specified in source -> `org-profile.positions.ciso.department`
 - Job title: Chief Information Security Officer (CISO) (source: Chef Information Security Officer (CISO))
 - Position manager: not specified in source -> default `Owner`; `org-profile.positions.ciso.manager`

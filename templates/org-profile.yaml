@@ -1,6 +1,6 @@
 # executive-team plugin: organization profile
 # Copy to the project root as org-profile.yaml (git-ignored) or run /executive-team:setup.
-# Empty strings mean "use the workbook value". Levels must be 1, 2, or 3.
+# Empty strings mean "use the matrix value". Levels must be 1, 2, or 3.
 company:
   name: ""
   owner_title: "Owner"
@@ -29,7 +29,7 @@ positions:
   cso:
     department: ""
     manager: "Owner"
-    level_overrides: {}        # the workbook has no CSO levels; set all 11 here, e.g. { 1: 3, 2: 3, ... }
+    level_overrides: {}        # the matrix has no CSO levels; set all 11 here, e.g. { 1: 3, 2: 3, ... }
     extra_skills: []
   cfo:
     department: ""

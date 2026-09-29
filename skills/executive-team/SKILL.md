@@ -7,7 +7,7 @@ version: 0.1.0
 
 ## Files in this folder
 - `references/routing-index.md`: officer x skill x required level x keywords, generated from the officer files.
-- `references/gaps-register.md`: every field the source workbook left blank or defective, with the org-profile key that fills it.
+- `references/gaps-register.md`: every field the source matrix left blank or defective, with the org-profile key that fills it.
 - `references/matrix-operations.md`: the assessment and training-plan column formats for matrix operations.
 
 ## Who is who
@@ -15,7 +15,7 @@ version: 0.1.0
 - The **Chief of Staff** serves the Owner: routes, fans out, synthesizes, records. Takes no business position.
 - The six **officers** (COO, CISO, CTO, CMO, CSO, CFO) hold the positions defined in their agent files. The manager of each is the Owner unless `org-profile.yaml` says otherwise.
 
-## Level definitions (verbatim from the workbook)
+## Level definitions (verbatim from the matrix)
 - **1 - Beginner.** Basic mastery: Knows and understands the fundamental concepts of the skill. Limited application: Performs simple, well-defined tasks related to the skill in well-defined situations. Supervision required: Requires frequent supervision and guidance to complete tasks.
 - **2 - Intermediate.** Proficient: Possesses a deep understanding and can explain complex concepts within the skill set. Moderately proficient: Performs a variety of tasks and can handle more complex situations. Partially proficient: Works independently on routine tasks but may still require occasional assistance with more complex situations.
 - **3 - Expert.** Complete mastery: Demonstrates complete mastery of the skill and can participate in its transmission to others. Extensive application: Addresses complex situations and solves diverse problems by applying the skill in innovative ways. Full autonomy: Works completely independently and can supervise or advise others on the application of the skill.
@@ -51,7 +51,7 @@ Consult: <position codes such as cfo, cto> | none
 3. Report an invalid override (level outside 1-3, unknown skill number, unknown position code) in one line and ignore it; keep the sheet value.
 4. Report a file that cannot be parsed with the offending line, and use the sheet values throughout.
 5. Keep the sheet value visible in the agent file as the source. Do not rewrite agent files to apply overrides.
-6. If the file is missing, say once per session: "No org-profile.yaml found; using workbook values. Run /executive-team:setup to customize."
+6. If the file is missing, say once per session: "No org-profile.yaml found; using matrix values. Run /executive-team:setup to customize."
 
 ## Routing (applies to: Chief of Staff)
 Use `references/routing-index.md` as the first pass: it holds every officer's skill names, levels and keywords. When the decision plausibly touches an officer's domain that the keywords do not name, open that officer's agent file and read its skills table (section 3) to confirm. Invite an officer when the decision the topic asks for falls within one of its skills at level 2 or 3. An incidental angle does not count: a cost line in every topic does not invite the CFO, a process step in every topic does not invite the COO. Never invent a match; with no match at level 2 or 3, ask the Owner.

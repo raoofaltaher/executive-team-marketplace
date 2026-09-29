@@ -1,6 +1,6 @@
 # Matrix operations
 
-Column formats an officer uses when the Owner asks for an assessment or a training plan. They mirror the review and training-log structures of the source workbook. Every value comes from the conversation; nothing about a person is written to disk unless the Owner names the file.
+Column formats an officer uses when the Owner asks for an assessment or a training plan. They mirror the review and training-log structures of the source matrix. Every value comes from the conversation; nothing about a person is written to disk unless the Owner names the file.
 
 ## Assessment (Team Member Review columns)
 

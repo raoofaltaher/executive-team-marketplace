@@ -1,7 +1,12 @@
 import os, sys, tempfile, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
-from verify_agents import parse_officer, verify, write_index, write_gaps
+from build_references import parse_officer, check_structure, write_index, write_gaps
 FIX = os.path.join(os.path.dirname(__file__), "fixtures")
+
+
+def fixture_text():
+    with open(os.path.join(FIX, "sample-officer.md"), encoding="utf-8") as fh:
+        return fh.read()
 
 
 class ParseTests(unittest.TestCase):
@@ -16,14 +21,13 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(o["skills"][0]["cells"], "B8:D8")
         self.assertEqual(o["skills"][1]["flags"], "description duplicates skill 1 in source")
         self.assertTrue(o["department_missing"]); self.assertTrue(o["manager_missing"]); self.assertTrue(o["objectives_template"])
+        self.assertEqual(check_structure(o), [])
 
 
 class FrontmatterTests(unittest.TestCase):
     def _with_fm(self, extra):
-        with open(os.path.join(FIX, "sample-officer.md"), encoding="utf-8") as fh:
-            src = fh.read()
         marker = "description: Sample officer for tests.\n"
-        return src.replace(marker, marker + extra)
+        return fixture_text().replace(marker, marker + extra)
 
     def test_model_inherit_allowed_other_models_rejected(self):
         with tempfile.TemporaryDirectory() as d:
@@ -37,21 +41,16 @@ class FrontmatterTests(unittest.TestCase):
                 parse_officer(bad)
 
 
-class VerifyTests(unittest.TestCase):
-    def test_verify_against_positions(self):
-        positions = {"smp": {"sheet": "SMP", "skills": [
-            {"n": 1, "name_fr": "Première chose", "level": 3, "cells": "B8:D8"},
-            {"n": 2, "name_fr": "Deuxième chose", "level": None, "cells": "B9:D9"}]}}
-        self.assertEqual(verify(FIX, positions), [])
-
-    def test_verify_reports_level_mismatch_and_missing_row(self):
-        positions = {"smp": {"sheet": "SMP", "skills": [
-            {"n": 1, "name_fr": "Première chose", "level": 2, "cells": "B8:D8"},
-            {"n": 2, "name_fr": "Deuxième chose", "level": None, "cells": "B9:D9"},
-            {"n": 3, "name_fr": "Troisième", "level": 1, "cells": "B10:D10"}]}}
-        errs = verify(FIX, positions)
-        self.assertTrue(any("level" in e and "skill 1" in e for e in errs))
-        self.assertTrue(any("missing skill 3" in e for e in errs))
+class StructureTests(unittest.TestCase):
+    def test_out_of_order_skill_and_wrong_sheet_are_reported(self):
+        text = fixture_text().replace("### Skill 2: Second Thing", "### Skill 3: Second Thing").replace("SMP!B8:D8", "XXX!B8:D8")
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, "o.md")
+            with open(p, "w", encoding="utf-8") as fh:
+                fh.write(text)
+            errs = check_structure(parse_officer(p))
+        self.assertTrue(any("not numbered" in e for e in errs), errs)
+        self.assertTrue(any("source sheet XXX" in e for e in errs), errs)
 
 
 class GenerateTests(unittest.TestCase):
@@ -59,7 +58,10 @@ class GenerateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             idx = os.path.join(d, "routing-index.md"); gaps = os.path.join(d, "gaps-register.md")
             write_index(FIX, idx); write_gaps(FIX, gaps)
-            i = open(idx, encoding="utf-8").read(); g = open(gaps, encoding="utf-8").read()
+            with open(idx, encoding="utf-8") as fh:
+                i = fh.read()
+            with open(gaps, encoding="utf-8") as fh:
+                g = fh.read()
             self.assertIn("| SMP | chief-sample-officer | 1 | First Thing | 3 | first, thing |", i)
             self.assertIn("| SMP | chief-sample-officer | 2 | Second Thing | 0 | second |", i)
             self.assertIn("| SMP | Department |", g)
@@ -67,7 +69,7 @@ class GenerateTests(unittest.TestCase):
             self.assertIn("org-profile.positions.smp.level_overrides.2", g)
             self.assertIn("Skill 2 flag: description duplicates skill 1 in source", g)
             self.assertIn("| SMP | Strategic objectives (TEMPLATE) | SMP!F11:G16 |", g)
-            self.assertIn("| SMP | Associated tasks column | SMP sheet | column not present in source; edit the workbook |", g)
+            self.assertIn("| SMP | Associated tasks column | SMP sheet |", g)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-import json, os, shutil, subprocess, sys, tempfile, unittest
+import contextlib, io, json, os, shutil, subprocess, sys, tempfile, unittest
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import bump_version
@@ -61,7 +61,8 @@ class VersionToolTests(unittest.TestCase):
             self._copy_tree(d)
             written = bump_version.write_version("9.9.9", root=d)
             self.assertEqual(written, [".claude-plugin/marketplace.json", ".claude-plugin/plugin.json"])
-            self.assertEqual(bump_version.check(root=d), "9.9.9")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(bump_version.check(root=d), "9.9.9")
             catalog = json.loads(open(os.path.join(d, ".claude-plugin", "marketplace.json"), encoding="utf-8").read())
             self.assertEqual(catalog["plugins"][1]["version"], "9.9.9-dev")
             self.assertEqual(catalog["metadata"]["version"], "9.9.9")
@@ -74,7 +75,9 @@ class VersionToolTests(unittest.TestCase):
             data["version"] = "1.2.3"
             with open(p, "w", encoding="utf-8") as fh:
                 json.dump(data, fh, indent=2)
-            self.assertIsNone(bump_version.check(root=d))
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                self.assertIsNone(bump_version.check(root=d))
+            self.assertIn("drift", out.getvalue())
             r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "bump_version.py"), "--check", "--root", d],
                                capture_output=True, text=True)
             self.assertEqual(r.returncode, 1, r.stdout + r.stderr)

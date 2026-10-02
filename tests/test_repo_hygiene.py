@@ -80,6 +80,15 @@ class HygieneTests(unittest.TestCase):
             self.assertIn(token, t)
         self.assertLess(len(t.splitlines()), 60, "the bootstrap must stay one screen")
 
+    def test_ci_workflow_runs_every_static_check(self):
+        wf = read(".github", "workflows", "ci.yml")
+        for cmd in ("python -m unittest discover -s tests", "build_references.py --check", "bump_version.py --check",
+                    "bash tests/hooks/test-session-start.sh", "shellcheck",
+                    "claude plugin validate . --strict", "claude plugin validate .claude-plugin/plugin.json --strict"):
+            self.assertIn(cmd, wf, cmd)
+        self.assertIn("windows-latest", wf)
+        self.assertIn("ubuntu-latest", wf)
+
     def test_user_invoked_skills_replace_legacy_commands(self):
         self.assertFalse(os.path.exists(os.path.join(ROOT, "commands")), "commands/ must be migrated to skills/")
         for s in USER_SKILLS:

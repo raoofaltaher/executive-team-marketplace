@@ -26,6 +26,7 @@ The repository is rebuilt on the obra/superpowers shell. Content is unchanged: t
 ### Documentation
 
 - One README. AGENTS.md, CONTRIBUTING.md and the pull request and issue templates follow the superpowers pattern. New `docs/testing.md` and `docs/windows-hooks.md`.
+- The pull request template asks for evidence the way PR #5 gave it: each model and the stage it did, links to the spec and plan, test counts, a live check, what was exercised by hand, and who reviewed the branch.
 
 ## v0.1.1 (2026-09-30)
 

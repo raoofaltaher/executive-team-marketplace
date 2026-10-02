@@ -1,17 +1,16 @@
 <!--
-BEFORE SUBMITTING: read every section. PRs that leave sections blank,
-bundle unrelated changes, or show no human review are closed without review.
+BEFORE SUBMITTING: fill in every section with specifics. PRs that leave
+sections blank, bundle unrelated changes, or show no human review are
+closed without review. PR #5 is a worked example of a complete description.
 -->
 
-> **This PR must target the `dev` branch, not `main`.** `main` is the released
-> branch; work lands on `dev` first. PRs opened against `main` will be asked to
-> retarget before review.
+> Targets `dev`. <!-- `main` is the released branch; only release PRs from `dev` target it. -->
 
 ## Who is submitting this PR? (required)
 
 | Field | Value |
 |-------|-------|
-| Model + version that wrote the change (or "human") | |
+| Model + version that wrote the change (or "human") | <!-- name each model and the stage it did, e.g. "Model A (spec and plan), Model B (execution)" --> |
 | Harness + version (Claude Code, other) | |
 | All plugins installed | |
 | Human who reviewed the complete diff | |
@@ -19,28 +18,34 @@ bundle unrelated changes, or show no human review are closed without review.
 ## What problem does this solve?
 <!-- What broke or what was missing, with the exact behaviour you saw:
      the command you ran, what the Chief of Staff or officer did, and a
-     transcript excerpt or minutes file. "Improving X" is not a problem. -->
+     transcript excerpt or minutes file. "Improving X" is not a problem.
+     Link the spec and plan if there are any:
+     docs/superpowers/specs/<date>-<topic>-design.md, docs/superpowers/plans/<date>-<topic>.md -->
 
 ## What does this PR change?
-<!-- One to three sentences. -->
+<!-- One to three sentences. Name any file that moved and why. Name the
+     version if this PR bumps it. -->
 
 ## Is this change appropriate for this plugin?
-<!-- Does it touch officer sections 1 to 4 (frozen)? Does it add personal
-     or company data, an importer, an integration, telemetry? If yes to
-     any, it does not belong here. -->
+<!-- Say it plainly: did officer sections 1 to 4 change? Were content files
+     edited, or only moved? Does it add personal or company data, an
+     importer, an integration, telemetry? If yes to any of the last four,
+     it does not belong here. -->
 
 ## What alternatives did you consider?
-<!-- What else did you try or evaluate, and why was it worse? -->
+<!-- Each alternative and why it lost, one sentence each. -->
 
 ## Evidence
-<!-- For behaviour changes: the same scenario run before and after, with the
-     difference described. For structural changes: the check output. -->
+<!-- Tick only what you ran on the final commit, and give the counts. -->
 
-- [ ] `python -m unittest discover -s tests` passes
+- [ ] `python -m unittest discover -s tests` passes (N tests)
 - [ ] `python scripts/build_references.py --check` passes
-- [ ] `python scripts/bump_version.py --check` passes
-- [ ] `bash tests/hooks/test-session-start.sh` passes
+- [ ] `python scripts/bump_version.py --check` passes (and `--audit` for a release)
+- [ ] `bash tests/hooks/test-session-start.sh` passes (N cases)
 - [ ] `claude plugin validate . --strict`, `.claude-plugin/plugin.json --strict`, `agents --strict`, `skills --strict` pass
+- Live check: <!-- what you ran in a real session and what you saw: a meeting before and after the change, or `claude -p --plugin-dir .` quoting the bootstrap -->
+- Exercised by hand: <!-- what the suites do not cover and you tried yourself: Windows cmd.exe, paths with spaces, Claude Desktop, an upgrade from the previous release -->
+- Review: <!-- who reviewed the branch before this PR (a fresh reviewer, which model) or "self-review only", and why -->
 
 ## Related issues and PRs
 <!-- #number, or "none found" after searching open and closed items -->

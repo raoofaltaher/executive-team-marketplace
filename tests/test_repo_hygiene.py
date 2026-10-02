@@ -1,4 +1,4 @@
-import os, re, subprocess, sys, unittest
+import json, os, re, subprocess, sys, unittest
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 AGENTS = ["chief-of-staff", "chief-operating-officer", "chief-information-security-officer", "chief-technology-officer",
           "chief-marketing-officer", "chief-sales-officer", "chief-financial-officer"]
@@ -18,7 +18,7 @@ class HygieneTests(unittest.TestCase):
     def test_only_plugin_files_are_tracked(self):
         for f in self.tracked():
             self.assertFalse(f.endswith((".xlsx", ".xls", ".csv")), f)
-            self.assertFalse(f.startswith((".remember/", "build/", "docs/executive/")), f)
+            self.assertFalse(f.startswith((".remember/", "build/", "docs/executive/", "plugins/")), f)
             self.assertNotEqual(f, "org-profile.yaml")
 
     def test_seven_agents_follow_agent_frontmatter_conventions(self):
@@ -60,6 +60,11 @@ class HygieneTests(unittest.TestCase):
         self.assertIn("Previous meeting:", cos)
         self.assertIn("AskUserQuestion", meet)
         self.assertTrue(skill.splitlines()[2].startswith("description: This skill should be used when"), skill.splitlines()[2])
+        with open(os.path.join(ROOT, ".claude-plugin", "marketplace.json"), encoding="utf-8") as fh:
+            catalog = json.load(fh)
+        by_name = {p["name"]: p for p in catalog["plugins"]}
+        self.assertEqual(by_name["executive-team"]["source"], "./")
+        self.assertEqual(by_name["executive-team-dev"]["source"]["ref"], "dev")
         for a in AGENTS[1:]:
             self.assertIn("executive-team:executive-team", read("agents", a + ".md"), a)
 
@@ -73,11 +78,11 @@ class HygieneTests(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(ROOT, "skills", "executive-team", "references", gen)), gen)
 
     def test_no_workbook_tooling_or_mentions_ship(self):
-        for gone in ("scripts/extract_positions.py", "scripts/verify_agents.py", "tests/test_extract.py", "docs/superpowers"):
+        for gone in ("scripts/extract_positions.py", "scripts/verify_agents.py", "tests/test_extract.py", "plugins"):
             self.assertFalse(os.path.exists(os.path.join(ROOT, gone)), gone)
         banned = re.compile(r"xlsx|openpyxl|SKILLS_WORKBOOK|extract_positions|verify_agents|workbook", re.I)
         for f in self.tracked():
-            if f.endswith((".md", ".json", ".yaml", ".py", ".txt")) and f != "tests/test_repo_hygiene.py":
+            if f.endswith((".md", ".json", ".yaml", ".yml", ".py", ".txt", ".sh", ".cmd")) and f != "tests/test_repo_hygiene.py":
                 self.assertIsNone(banned.search(read(f)), f)
 
     def test_generated_files_fresh(self):

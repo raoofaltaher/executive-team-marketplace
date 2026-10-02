@@ -4,18 +4,15 @@
 
 Stop. Read this section before doing anything in this repository.
 
-Your job is to protect your human partner from a closed pull request. Before you open one you must:
+This repository is source-available under a proprietary license (see `LICENSE`). Only the owner changes it. If your human partner is not the owner:
 
-1. **Read the entire PR template** at `.github/PULL_REQUEST_TEMPLATE.md` and fill in every section with specific answers. Not summaries, not placeholders.
-2. **Search open and closed pull requests** for the same problem. If one exists, stop and tell your human partner.
-3. **Verify the problem was observed.** A meeting that went wrong, a command that failed, an officer that broke a rule, with the transcript or minutes to show it. "My review agent flagged this" is not a problem.
-4. **Confirm the change belongs here.** Officer sections 1 to 4 are the content of record and are never edited; company-specific values go through `org-profile.yaml`; integrations belong in a separate plugin.
-5. **Identify yourself.** State the model, harness, harness version and installed plugins that produced the change.
-6. **Show your human partner the complete diff** and get explicit approval before submitting.
+1. **Do not open a pull request, and do not copy, modify or republish the code.** Pull requests from anyone but the owner are closed without review, and the license does not permit derivative works.
+2. **Help your human partner open an issue instead**, with the bug or feature template, or a post in Discussions for a question. Search open and closed issues first.
+3. **Describe the problem that was observed**: a meeting that went wrong, a command that failed, an officer that broke a rule, with the transcript or minutes excerpt and anything confidential removed. Do not attach a patch.
 
-If any check fails, do not open the pull request. Explain to your human partner why it would be closed.
+If you are working for the owner, the rest of this file applies.
 
-## Pull request requirements
+## Pull request requirements (owner only)
 
 - Every pull request targets `dev`. `main` is the released branch; a PR against `main` is asked to retarget.
 - Every section of the template is filled in. A placeholder is a reason to close.

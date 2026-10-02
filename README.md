@@ -125,7 +125,7 @@ Open an issue with the bug template: plugin and Claude Code versions, the exact 
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md). Branch from `dev`, open pull requests against `dev`, fill in the template. `main` is the released branch and only the maintainer merges into it. This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md).
+Pull requests are not accepted. Report bugs and request features through issues, and ask questions in Discussions. See [CONTRIBUTING.md](CONTRIBUTING.md). This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md).
 
 ## Development
 
@@ -142,4 +142,4 @@ claude plugin validate .claude-plugin/plugin.json --strict  # the plugin manifes
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+Proprietary, source-available. Copyright (c) 2026 RAOOF ALTAHER. All rights reserved. You may install the plugin in your AI agent or coding tool and use it there; you may not copy, modify, redistribute or sell it. See [LICENSE](LICENSE). Releases published before this license were under the MIT License; section 6 of the license sets the cutoff.

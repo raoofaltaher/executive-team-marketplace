@@ -24,10 +24,14 @@ pass() { echo "  [PASS] $1"; }
 fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 skip() { echo "  [SKIP] $1"; }
 
-run_hook() {
-    local stdin_json="$1"
-    shift
-    printf '%s' "$stdin_json" | env -i PATH="$PATH" HOME="$WORK" "$@" "$BASH" "$HOOK" 2>&1
+run_hook_in() {
+    local run_dir="$1" stdin_json="$2"
+    shift 2
+    (cd "$run_dir" && printf '%s' "$stdin_json" | env -i PATH="$PATH" HOME="$WORK" "$@" "$BASH" "$HOOK" 2>&1)
+}
+
+json_escape() {
+    printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'
 }
 
 CHECK_PY='
@@ -75,20 +79,22 @@ expect() {
 NUDGE="This project has no org-profile.yaml"
 mkdir -p "$WORK/repo-noprofile/.git" "$WORK/repo-profile/.git" "$WORK/repo-profile/sub" "$WORK/plain"
 : > "$WORK/repo-profile/org-profile.yaml"
+NO_NUDGE_DIR="$WORK/repo-profile"
+NUDGE_DIR="$WORK/repo-noprofile"
 
 echo "SessionStart hook"
 
-out="$(run_hook '{}' CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+out="$(run_hook_in "$NO_NUDGE_DIR" '{}' CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
 expect "1 nested shape under CLAUDE_PLUGIN_ROOT with the bootstrap body" nested "## Who is in the room" "" "$out"
 expect "1b nested shape announces the team" nested "You have an executive team" "" "$out"
 
-out="$(run_hook '{}')"
+out="$(run_hook_in "$NO_NUDGE_DIR" '{}')"
 expect "2 flat shape without CLAUDE_PLUGIN_ROOT" flat "## Who is in the room" "" "$out"
 
-out="$(run_hook "{\"cwd\": \"$WORK/repo-noprofile\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+out="$(run_hook_in "$NO_NUDGE_DIR" "{\"cwd\": \"$(json_escape "$WORK/repo-noprofile")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
 expect "3 nudge in a git repo without org-profile.yaml" nested "$NUDGE" "" "$out"
 
-out="$(run_hook "{\"cwd\": \"$WORK/repo-profile/sub\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+out="$(run_hook_in "$NUDGE_DIR" "{\"cwd\": \"$(json_escape "$WORK/repo-profile/sub")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
 expect "4 no nudge when org-profile.yaml sits in a parent folder" nested "## Who is in the room" "$NUDGE" "$out"
 
 ancestor_has_git=0
@@ -100,22 +106,22 @@ done
 if [ "$ancestor_has_git" = 1 ]; then
     skip "5 no nudge outside a git repo (temp dir lives inside a git repo)"
 else
-    out="$(run_hook "{\"cwd\": \"$WORK/plain\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+    out="$(run_hook_in "$NUDGE_DIR" "{\"cwd\": \"$(json_escape "$WORK/plain")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
     expect "5 no nudge outside a git repo" nested "## Who is in the room" "$NUDGE" "$out"
 fi
 
-out="$(run_hook "{\"cwd\": \"$WORK/repo-noprofile\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" EXECUTIVE_TEAM_NUDGE=off)"
+out="$(run_hook_in "$NUDGE_DIR" "{\"cwd\": \"$(json_escape "$WORK/repo-noprofile")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" EXECUTIVE_TEAM_NUDGE=off)"
 expect "6 EXECUTIVE_TEAM_NUDGE=off silences the nudge" nested "## Who is in the room" "$NUDGE" "$out"
 
-out="$(run_hook '' CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+out="$(run_hook_in "$NO_NUDGE_DIR" '' CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
 expect "7 empty stdin still yields valid JSON" nested "## Who is in the room" "" "$out"
 
-out="$(printf '%s' "{\"cwd\": \"$WORK/repo-noprofile\"}" | env -i PATH= HOME="$WORK" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" "$BASH" "$HOOK" 2>&1)"
+out="$(cd "$NO_NUDGE_DIR" && printf '%s' "{\"cwd\": \"$(json_escape "$WORK/repo-noprofile")\"}" | env -i PATH= HOME="$WORK" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" "$BASH" "$HOOK" 2>&1)"
 expect "8 empty PATH still yields the nudge and valid JSON" nested "$NUDGE" "" "$out"
 
-direct="$(run_hook "{\"cwd\": \"$WORK/repo-noprofile\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
-via_wrapper="$(printf '%s' "{\"cwd\": \"$WORK/repo-noprofile\"}" | env -i PATH="$PATH" HOME="$WORK" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" "$BASH" "$WRAPPER" session-start 2>&1)"
-if [ "$direct" = "$via_wrapper" ]; then
+direct="$(run_hook_in "$NO_NUDGE_DIR" "{\"cwd\": \"$(json_escape "$WORK/repo-noprofile")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+via_wrapper="$(cd "$NO_NUDGE_DIR" && printf '%s' "{\"cwd\": \"$(json_escape "$WORK/repo-noprofile")\"}" | env -i PATH="$PATH" HOME="$WORK" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" "$BASH" "$WRAPPER" session-start 2>&1)"
+if [ "$direct" = "$via_wrapper" ] && [[ "$via_wrapper" == *"$NUDGE"* ]]; then
     pass "9 run-hook.cmd dispatches to session-start with identical output"
 else
     fail "9 run-hook.cmd dispatches to session-start with identical output"
@@ -124,9 +130,12 @@ fi
 
 if command -v cygpath >/dev/null 2>&1; then
     win="$(cygpath -w "$WORK/repo-noprofile")"
-    win_json="${win//\\/\\\\}"
-    out="$(run_hook "{\"cwd\": \"$win_json\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+    out="$(run_hook_in "$NO_NUDGE_DIR" "{\"cwd\": \"$(json_escape "$win")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
     expect "10 Windows-style cwd is resolved" nested "$NUDGE" "" "$out"
+    spaced="$WORK/My Project été"
+    mkdir -p "$spaced/.git"
+    out="$(run_hook_in "$NO_NUDGE_DIR" "{\"cwd\": \"$(json_escape "$(cygpath -w "$spaced")")\"}" CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+    expect "10b Windows-style cwd with a space and accents is resolved" nested "$NUDGE" "" "$out"
 else
     skip "10 Windows-style cwd (cygpath not available)"
 fi
@@ -134,8 +143,11 @@ fi
 broken="$WORK/broken-plugin"
 mkdir -p "$broken/hooks" "$broken/skills"
 cp "$HOOK" "$broken/hooks/session-start"
-out="$(printf '%s' '{}' | env -i PATH="$PATH" HOME="$WORK" CLAUDE_PLUGIN_ROOT="$broken" "$BASH" "$broken/hooks/session-start" 2>&1)"
+out="$(cd "$NO_NUDGE_DIR" && printf '%s' '{}' | env -i PATH="$PATH" HOME="$WORK" CLAUDE_PLUGIN_ROOT="$broken" "$BASH" "$broken/hooks/session-start" 2>&1)"
 expect "11 unreadable bootstrap skill still yields valid JSON" nested "Error reading using-executive-team skill" "" "$out"
+
+out="$(run_hook_in "$NUDGE_DIR" '{"cwd": "C:\Bad\Escape"}' CLAUDE_PLUGIN_ROOT="$REPO_ROOT")"
+expect "12 an unparseable cwd falls back to the working directory" nested "$NUDGE" "" "$out"
 
 echo
 if [ "$FAILURES" -eq 0 ]; then

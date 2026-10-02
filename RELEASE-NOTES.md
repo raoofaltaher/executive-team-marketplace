@@ -20,7 +20,7 @@ The repository is rebuilt on the obra/superpowers shell. Content is unchanged: t
 ### Tooling
 
 - `.version-bump.json` declares every location that carries the version; `scripts/bump_version.py` writes them, `--check` detects drift, `--audit` finds the version string in undeclared files.
-- New tests: `tests/test_hooks.py` and `tests/hooks/test-session-start.sh` (eleven cases, including empty PATH, Windows paths and an unreadable skill).
+- New tests: `tests/test_hooks.py` and `tests/hooks/test-session-start.sh` (fourteen cases, including empty PATH, Windows paths with spaces and accents, an unreadable skill and an unparseable `cwd`).
 - Continuous integration on every pull request to `dev` and `main`, on Ubuntu and Windows: unit tests, references check, version check, hook test, ShellCheck, and plugin validation of both the marketplace and the plugin manifest.
 
 ### Documentation

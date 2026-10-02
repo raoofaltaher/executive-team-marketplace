@@ -1,5 +1,26 @@
 # Release Notes
 
+## v0.2.1 (2026-10-02)
+
+The license changes. Plugin behaviour is unchanged: the agents, skills, hook and commands are the same files as v0.2.0.
+
+### License
+
+- The MIT License is replaced by a proprietary, source-available license. Copyright (c) 2026 RAOOF ALTAHER. All rights reserved.
+- You may install the plugin in an AI agent or coding tool through its plugin or marketplace mechanism and use it there, for your own work or your employer's internal work.
+- Copying, modifying, redistributing, selling, reusing the plugin in another product, and using its content to train models are not permitted. See `LICENSE` for the full terms.
+- Releases up to and including v0.2.0 remain under the MIT License for copies already obtained. v0.2.1 and every later release are under the new license.
+- `plugin.json` declares `"license": "SEE LICENSE IN LICENSE"`.
+
+### Contributing
+
+- Pull requests are accepted from the owner only. Report bugs and request features through issues; ask questions in Discussions, which are now enabled.
+- README, CONTRIBUTING, AGENTS and the pull request template say so. The maintainer workflow is unchanged.
+
+### Upgrading
+
+`/plugin marketplace update executive-team-marketplace`, then `/plugin update executive-team`.
+
 ## v0.2.0 (2026-10-02)
 
 The repository is rebuilt on the obra/superpowers shell. Content is unchanged: the seven agents, the protocol and the three commands are the same files as v0.1.1, moved.

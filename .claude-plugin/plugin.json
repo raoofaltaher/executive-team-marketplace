@@ -1,7 +1,7 @@
 {
   "name": "executive-team",
   "description": "An AI executive team (COO, CISO, CTO, CMO, CSO, CFO) plus a Chief of Staff, built from a skills-by-position matrix. Bring real business cases to a candid multi-officer deliberation and get an executive brief.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "RAOOF A."
   },

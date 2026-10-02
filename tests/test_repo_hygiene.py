@@ -68,6 +68,18 @@ class HygieneTests(unittest.TestCase):
         for a in AGENTS[1:]:
             self.assertIn("executive-team:executive-team", read("agents", a + ".md"), a)
 
+    def test_bootstrap_skill_introduces_the_team(self):
+        t = read("skills", "using-executive-team", "SKILL.md")
+        self.assertTrue(t.startswith("---\nname: using-executive-team\n"), t[:60])
+        self.assertIn("<SUBAGENT-STOP>", t)
+        self.assertIn("## Who is in the room", t)
+        for code in ("COO", "CISO", "CTO", "CMO", "CSO", "CFO"):
+            self.assertIn(code, t)
+        for token in ("/executive-team:meet", "/executive-team:setup", "/executive-team:gaps-report",
+                      "executive-team:executive-team", "Confidence:", "Consult:", "org-profile.yaml"):
+            self.assertIn(token, t)
+        self.assertLess(len(t.splitlines()), 60, "the bootstrap must stay one screen")
+
     def test_user_invoked_skills_replace_legacy_commands(self):
         self.assertFalse(os.path.exists(os.path.join(ROOT, "commands")), "commands/ must be migrated to skills/")
         for s in USER_SKILLS:

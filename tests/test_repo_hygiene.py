@@ -89,6 +89,14 @@ class HygieneTests(unittest.TestCase):
         self.assertIn("windows-latest", wf)
         self.assertIn("ubuntu-latest", wf)
 
+    def test_pr_template_asks_for_evidence_like_pr_5(self):
+        t = read(".github", "PULL_REQUEST_TEMPLATE.md")
+        for section in ("## Who is submitting this PR? (required)", "## What problem does this solve?",
+                        "## What does this PR change?", "## Is this change appropriate for this plugin?",
+                        "## What alternatives did you consider?", "## Evidence", "## Related issues and PRs",
+                        "## Human review", "Live check:", "Exercised by hand:", "Review:", "(N tests)", "(N cases)"):
+            self.assertIn(section, t, section)
+
     def test_user_invoked_skills_replace_legacy_commands(self):
         self.assertFalse(os.path.exists(os.path.join(ROOT, "commands")), "commands/ must be migrated to skills/")
         for s in USER_SKILLS:

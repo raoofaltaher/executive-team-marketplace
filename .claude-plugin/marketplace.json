@@ -7,14 +7,14 @@
   },
   "metadata": {
     "description": "AI executive team plugins for Claude Code: officers built from a skills-by-position matrix, chaired by you.",
-    "version": "0.1.1"
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "executive-team",
       "source": "./",
       "description": "An AI executive team (COO, CISO, CTO, CMO, CSO, CFO) plus a Chief of Staff. Bring real business cases to a candid multi-officer deliberation and get an executive brief with minutes.",
-      "version": "0.1.1",
+      "version": "0.2.0",
       "category": "productivity",
       "keywords": [
         "executive-team",
@@ -37,7 +37,7 @@
         "ref": "dev"
       },
       "description": "DEV BRANCH of executive-team for contributors and testers. Uninstall executive-team before installing this; the two register the same agents and skills.",
-      "version": "0.1.1-dev"
+      "version": "0.2.0-dev"
     }
   ]
 }

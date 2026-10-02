@@ -12,6 +12,9 @@ labels: enhancement
 ## The proposal
 <!-- What should change: which agent, skill, or protocol rule, and how it would behave. -->
 
+## Which part does it touch?
+<!-- The Chief of Staff, an officer's behaviour (section 5 or 6), a command, the protocol, the session bootstrap, the hook, the tooling. If it needs a new skill, level or task on an officer, say so: sections 1 to 4 are frozen, so it will be discussed as an org-profile extension instead. -->
+
 ## How would we know it worked?
 <!-- The scenario you would run before and after, and the difference you expect in the brief or minutes. -->
 

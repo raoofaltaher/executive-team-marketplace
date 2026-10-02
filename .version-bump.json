@@ -7,6 +7,7 @@
   ],
   "audit": {
     "exclude": [
+      "LICENSE",
       "RELEASE-NOTES.md",
       "docs",
       "tests",

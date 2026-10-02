@@ -29,6 +29,10 @@ It creates two rulesets:
 4. Rules: Restrict deletions; Block force pushes; Require a pull request before merging (1 required approval, Require review from Code Owners, Dismiss stale approvals); Require conversation resolution before merging.
 5. Repeat as `protect-dev` for `dev` with the same rules.
 
+## Required status check
+
+After the first green run of `.github/workflows/ci.yml` on a pull request, add the `checks` jobs as required status checks to both rulesets (Settings > Rules > Rulesets > edit > Require status checks to pass > add `checks (ubuntu-latest)` and `checks (windows-latest)`). The script does not do this because GitHub only offers a check name once it has run.
+
 ## Default branch
 
 Keep `main` as the default branch so marketplace installs and `git clone` read released content. Contributors are told in `CONTRIBUTING.md` and the PR template to target `dev`.

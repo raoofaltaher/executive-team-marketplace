@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m unittest discover -s tests
+      - run: python scripts/build_references.py --check
+      - run: python scripts/bump_version.py --check
+      - run: bash tests/hooks/test-session-start.sh
+        shell: bash
+      - if: runner.os == 'Linux'
+        run: shellcheck --severity=warning hooks/session-start
+      - if: runner.os == 'Linux'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - if: runner.os == 'Linux'
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin validate . --strict
+          claude plugin validate .claude-plugin/plugin.json --strict
+          claude plugin validate agents --strict
+          claude plugin validate skills --strict

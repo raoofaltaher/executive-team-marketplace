@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "$0" in
+  */*|*\\*) SCRIPT_DIR="$(cd "${0%[/\\]*}" && pwd)" ;;
+  *) SCRIPT_DIR="$(pwd)" ;;
+esac
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+skill_md="${PLUGIN_ROOT}/skills/using-executive-team/SKILL.md"
+if [ -r "$skill_md" ]; then
+  skill_content="$(<"$skill_md")"
+else
+  skill_content="Error reading using-executive-team skill"
+fi
+
+NUDGE_NO_PROFILE="This project has no org-profile.yaml. When the Owner first calls on the executive team here, offer /executive-team:setup before the first meeting."
+
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+
+read_hook_input() {
+    local input=""
+    if [ ! -t 0 ]; then
+        IFS= read -r -d '' -t 1 input || true
+    fi
+    printf '%s' "$input"
+}
+
+json_string_value() {
+    local json="$1" key="$2" rest value="" ch
+    case "$json" in
+        *"\"$key\""*) ;;
+        *) return 1 ;;
+    esac
+    rest="${json#*\"$key\"}"
+    rest="${rest#"${rest%%[![:space:]]*}"}"
+    [ "${rest:0:1}" = ":" ] || return 1
+    rest="${rest:1}"
+    rest="${rest#"${rest%%[![:space:]]*}"}"
+    [ "${rest:0:1}" = '"' ] || return 1
+    rest="${rest:1:4096}"
+    while [ -n "$rest" ]; do
+        ch="${rest:0:1}"
+        case "$ch" in
+            '"')
+                printf '%s' "$value"
+                return 0
+                ;;
+            '\')
+                case "${rest:1:1}" in
+                    '"' | '\' | '/') value+="${rest:1:1}" ;;
+                    *) return 1 ;;
+                esac
+                rest="${rest:2}"
+                ;;
+            *)
+                value+="$ch"
+                rest="${rest:1}"
+                ;;
+        esac
+    done
+    return 1
+}
+
+to_posix_dir() {
+    local dir="$1"
+    case "$dir" in
+        [A-Za-z]:\\* | [A-Za-z]:/* | *\\*)
+            if command -v cygpath >/dev/null 2>&1; then
+                dir="$(cygpath -u "$dir" 2>/dev/null || printf '%s' "$dir")"
+            else
+                dir="${dir//\\//}"
+            fi
+            ;;
+    esac
+    printf '%s' "$dir"
+}
+
+parent_dir() {
+    local d="${1%/}"
+    case "$d" in
+        */*) d="${d%/*}"; printf '%s' "${d:-/}" ;;
+        *) printf '.' ;;
+    esac
+}
+
+find_upward() {
+    local dir="$1" name="$2" parent
+    while [ -n "$dir" ]; do
+        if [ -e "${dir%/}/$name" ]; then
+            return 0
+        fi
+        parent="$(parent_dir "$dir")"
+        if [ "$parent" = "$dir" ] || [ "$parent" = "." ]; then
+            return 1
+        fi
+        dir="$parent"
+    done
+    return 1
+}
+
+project_nudge() {
+    local input dir
+    case "${EXECUTIVE_TEAM_NUDGE:-}" in
+        [Oo][Ff][Ff]) return 0 ;;
+    esac
+    input="$(read_hook_input)"
+    dir="$(json_string_value "$input" cwd || true)"
+    dir="$(to_posix_dir "$dir")"
+    if [ -z "$dir" ] || [ ! -d "$dir" ]; then
+        dir="$PWD"
+    fi
+    if find_upward "$dir" org-profile.yaml; then
+        return 0
+    fi
+    if find_upward "$dir" .git; then
+        printf '%s' "$NUDGE_NO_PROFILE"
+    fi
+    return 0
+}
+
+skill_escaped="$(escape_for_json "$skill_content")"
+nudge_line="$(project_nudge || true)"
+nudge_escaped=""
+if [ -n "$nudge_line" ]; then
+    nudge_escaped="\n\n$(escape_for_json "$nudge_line")"
+fi
+session_context="<EXTREMELY_IMPORTANT>\nYou have an executive team.\n\n**Below is the full content of your 'executive-team:using-executive-team' skill. It tells you who the team is and how to use it. For everything else, use the 'Skill' tool and the agents:**\n\n${skill_escaped}${nudge_escaped}\n</EXTREMELY_IMPORTANT>"
+
+emit() {
+    if command -v cat >/dev/null 2>&1; then
+        printf '%s\n' "$1" | cat
+    else
+        printf '%s\n' "$1"
+    fi
+}
+
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+    emit "{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": \"${session_context}\"}}"
+else
+    emit "{\"additionalContext\": \"${session_context}\"}"
+fi
+
+exit 0

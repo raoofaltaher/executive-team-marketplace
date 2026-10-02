@@ -236,7 +236,7 @@ All suites run from the repository root. Prerequisites: Python 3.10 or later, ba
 - `test_references.py`: unchanged assertions; the import path becomes `../scripts` relative to `tests/`.
 - `test_repo_hygiene.py`, updated:
   - `ROOT` is the repository root.
-  - Tracked-file rules: no `.xlsx`, `.xls`, `.csv`; nothing under `.remember/`, `build/`, `docs/executive/`, `plugins/`; no `org-profile.yaml`.
+  - Tracked-file rules: no spreadsheet or CSV files; nothing under `.remember/`, `build/`, `docs/executive/`, `plugins/`; no `org-profile.yaml`.
   - The ban on `docs/superpowers` is removed; the bans on the retired spreadsheet tooling stay.
   - Agent, skill and orchestration conventions as today, with root-relative paths.
   - New: `skills/using-executive-team/SKILL.md` exists, its frontmatter `name` is `using-executive-team`, its body contains `<SUBAGENT-STOP>`, the six officer codes and the strings `/executive-team:meet`, `/executive-team:setup`, `/executive-team:gaps-report`.

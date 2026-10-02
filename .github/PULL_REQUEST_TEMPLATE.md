@@ -13,6 +13,7 @@ bundle unrelated changes, or show no human review are closed without review.
 |-------|-------|
 | Model + version that wrote the change (or "human") | |
 | Harness + version (Claude Code, other) | |
+| All plugins installed | |
 | Human who reviewed the complete diff | |
 
 ## What problem does this solve?
@@ -23,18 +24,23 @@ bundle unrelated changes, or show no human review are closed without review.
 ## What does this PR change?
 <!-- One to three sentences. -->
 
+## Is this change appropriate for this plugin?
+<!-- Does it touch officer sections 1 to 4 (frozen)? Does it add personal
+     or company data, an importer, an integration, telemetry? If yes to
+     any, it does not belong here. -->
+
+## What alternatives did you consider?
+<!-- What else did you try or evaluate, and why was it worse? -->
+
 ## Evidence
 <!-- For behaviour changes: the same scenario run before and after, with the
      difference described. For structural changes: the check output. -->
 
-- [ ] `python scripts/build_references.py --check` passes in `plugins/executive-team`
 - [ ] `python -m unittest discover -s tests` passes
-- [ ] `claude plugin validate . --strict`, `agents --strict`, `skills --strict` pass
-
-## Boundaries
-- [ ] I did not edit sections 1 to 4 of any officer agent
-- [ ] This PR adds no personal data, spreadsheet importer, telemetry, or third-party integration
-- [ ] This PR contains one change, not several unrelated ones
+- [ ] `python scripts/build_references.py --check` passes
+- [ ] `python scripts/bump_version.py --check` passes
+- [ ] `bash tests/hooks/test-session-start.sh` passes
+- [ ] `claude plugin validate . --strict`, `.claude-plugin/plugin.json --strict`, `agents --strict`, `skills --strict` pass
 
 ## Related issues and PRs
 <!-- #number, or "none found" after searching open and closed items -->

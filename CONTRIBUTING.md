@@ -2,52 +2,55 @@
 
 Thank you for helping improve the executive-team plugin.
 
-## Branches
+This repository is source-available, not open source. The code is public so you can see what you install, but every right in it belongs to the owner. Read [LICENSE](LICENSE): you may install the plugin in your AI agent or coding tool and use it, and nothing else.
 
-- `main` is the released branch. Every install from the marketplace reads it. Only the maintainer merges into it, and every merge is a release with a version bump and release notes.
-- `dev` is the integration branch. All work lands here first. Pull requests must target `dev`; a PR opened against `main` will be asked to retarget.
+## How you can help
 
-## How to contribute
+- **Report a bug.** Open an issue with the bug template.
+- **Request a feature or a change.** Open an issue with the feature template. Describe the problem you hit, not a patch.
+- **Ask a question or start a discussion.** Use [Discussions](https://github.com/raoofaltaher/executive-team-marketplace/discussions).
 
-1. Fork the repository and switch to the `dev` branch.
-2. Create a branch for your change, named for what it does (for example `fix/cso-invite-reason` or `feat/officer-answer-format`).
-3. Make one change per branch. Bundled unrelated changes are closed without review.
-4. Run the checks from the repository root before you open the PR:
-
-   ```
-   python -m unittest discover -s tests
-   python scripts/build_references.py --check
-   python scripts/bump_version.py --check
-   bash tests/hooks/test-session-start.sh
-   claude plugin validate . --strict
-   claude plugin validate .claude-plugin/plugin.json --strict
-   claude plugin validate agents --strict
-   claude plugin validate skills --strict
-   ```
-
-5. Open a pull request against `dev` and fill in every section of the template. A human must have reviewed the complete diff before submission.
-
-## What is welcome
-
-- Fixes to the meeting protocol, the Chief of Staff, the bootstrap or the user-invoked skills, with a transcript or minutes file that shows the problem and the fix.
-- Clearer wording in agent or skill files, with evidence that agents follow the new wording better (run the scenario before and after).
-- Fixes to the hook, the scripts or the tests, with the failing case added to the suite.
-- Documentation fixes.
+Ideas and reports submitted in issues and discussions may be used by the owner freely, as section 3 of the license sets out.
 
 ## What is not accepted
 
-- Changes to sections 1 to 4 of any officer agent. Those sections reproduce the source skills matrix verbatim and are the plugin's content of record. Gaps and defects in them are filled through `org-profile.yaml`, never by editing the files.
-- Anything that stores, requests, or reproduces personal data about employees.
-- Third-party service integrations, telemetry, or network calls inside agents, skills, hooks or scripts.
-- Behaviour-shaping wording changes without a before/after scenario.
-- Project-specific or personal configuration submitted as plugin defaults.
-- Comments in code files.
+- Pull requests, patches or code from anyone other than the owner. They are closed without review.
+- Forks, copies, mirrors or modified versions of the plugin published elsewhere.
 
 ## Reporting problems
 
-Open an issue with the template that fits. Include the plugin and Claude Code versions, what you asked, what the agent did, and the minutes file or transcript excerpt. Search open and closed issues first.
+Include the plugin and Claude Code versions, what you asked, what the agent did, and the minutes file or transcript excerpt with anything confidential removed. Search open and closed issues first.
 
-## Maintainer release flow
+## Maintainer workflow
+
+These rules apply to the owner's own work.
+
+### Branches
+
+- `main` is the released branch. Every install from the marketplace reads it. Every merge into it is a release with a version bump and release notes.
+- `dev` is the integration branch. All work lands here first through a pull request.
+
+### Checks
+
+Run from the repository root before every pull request:
+
+```
+python -m unittest discover -s tests
+python scripts/build_references.py --check
+python scripts/bump_version.py --check
+bash tests/hooks/test-session-start.sh
+claude plugin validate . --strict
+claude plugin validate .claude-plugin/plugin.json --strict
+claude plugin validate agents --strict
+claude plugin validate skills --strict
+```
+
+### Content rules
+
+- Sections 1 to 4 of any officer agent are never edited. They reproduce the source skills matrix verbatim. Gaps and defects are filled through `org-profile.yaml`.
+- No personal data about employees, no third-party integrations, no telemetry or network calls, no comments in code files.
+
+### Release flow
 
 1. On `dev`: `python scripts/bump_version.py <x.y.z>`, then `python scripts/bump_version.py --audit` (must print `All clear`).
 2. Add a section to `RELEASE-NOTES.md`.
